@@ -1,0 +1,144 @@
+/* generic layout */
+[v-cloak] {
+    display: none;
+}
+
+body {
+    background-color: #fafafa;
+}
+
+.container-intro {
+    background-image: url('../immagini/background/titolo.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 100%;
+}
+
+.container-footer {
+    margin-top: auto;
+    background-color: #0772ff;
+}
+
+.card-login {
+    background-color: rgba(255, 255, 255, 0.9);
+}
+
+hr {
+    background-color: #0772ff;
+    height: 2px;
+}
+
+.lbl-info {
+    border: none;
+    font-weight: bold;
+    background-color: transparent;
+    text-shadow: 0px 0px 10px white;
+}
+
+.loading-app,
+.view-form,
+.view-avvio {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    min-height: 100vh;
+}
+
+/* shadow controllers */
+.form-control:focus,
+.form-select:focus,
+.btn-close {
+    box-shadow: 1px 1px 1px rgb(13, 110, 253) inset, 1px 1px 4px rgb(13, 110, 253);
+}
+
+.accordion {
+    box-shadow: none;
+}
+
+.accordion-button:not(.collapsed) {
+    background-color: rgb(13, 110, 253);
+    color: #fff;
+}
+
+.accordion-button:focus {
+    box-shadow: 1px 1px 1px rgb(13, 110, 253) inset, 1px 1px 4px rgb(13, 110, 253);
+}
+
+/* navbar */
+a.navbar-brand {
+    color: #0772ff;
+}
+
+a.navbar-brand:hover {
+    color: #0772ff;
+}
+
+.text-navbar {
+    color: #fafafa;
+}
+
+.text-navbar:hover {
+    color: #0772ff;
+}
+
+.nav-tab,
+.nav-tab:hover {
+    color: #fff;
+}
+
+/* navbar popover*/
+
+.custom-popover {
+    --bs-popover-max-width: 300px;
+  }
+
+  .popover-body {
+    max-height: 450px;
+    overflow-y: auto;
+    white-space:pre-wrap;
+}
+
+/* button */
+.btnHelp,
+.btnDescrizione {
+    padding: 0px 0px 0px 0px;
+    border: none;
+}
+
+/* list */
+li.automazione {
+    transition: all 0.1s ease-in-out;
+}
+
+li.automazione:hover {
+    transform: scale(1.02);
+}
+
+#drop-dispositivi,
+.dropdown-menu,
+.dropdown-menu {
+    width: 80vw;
+}
+
+/* images */
+.icon-centered {
+    vertical-align: middle;
+    text-align: center;
+}
+
+.img-thumbnail {
+    width: 30%;
+}
+
+/* navigation */
+.page-link, .dropdown-item {
+    cursor: pointer;
+}
+
+/* modal */
+.modal-header,
+.modal-footer {
+    background-color: #fafafa;
+}

@@ -1,0 +1,19 @@
+.video-js {
+    font-size: small;
+    color: #fff;
+}
+
+/* Change the border of the big play button. */
+.video-js .vjs-big-play-button {
+    border-color: #fff;
+    background-color: #0772ff;
+    color: #fff;
+}
+
+/* Change the color of various "bars". */
+.video-js .vjs-volume-level,
+.video-js .vjs-play-progress,
+.video-js .vjs-slider-bar {
+    color: #fff;
+    background-color: #0772ff !important;
+}

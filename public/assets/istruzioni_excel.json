@@ -1,0 +1,83 @@
+{
+    "dispositivi": [
+        {
+            "Nome": "NomeDispositivo",
+            "Descrizione": "Inserire il nome che si vuole dare al dispositivo"
+        },
+        {
+            "Nome": "Deveui",
+            "Descrizione": "Inserire il codice unico del dispositivo"
+        },
+        {
+            "Nome": "Latitudine",
+            "Descrizione": "Inserire la coordinata Latitudine del dispositivo"
+        },
+        {
+            "Nome": "Longitudine",
+            "Descrizione": "Inserire la coordinata Longitudine del dispositivo"
+        },
+        {
+            "Nome": "Categoria",
+            "Descrizione": "Inserire la categoria del dispositivo dalla lista riportata qui sotto"
+        },
+        {
+            "Nome": "Struttura",
+            "Descrizione": "Inserire il nome della struttura (il più corretto possibile)"
+        }
+    ],
+
+    "comandi": [
+        {
+            "Nome": "Nome",
+            "Descrizione": "Inserire il nome desiderato per il comando" 
+        },
+        {
+            "Nome": "Codice",
+            "Descrizione": "Inserire il codice di esecuzione del comando" 
+        },
+        {
+            "Nome": "Descrizione",
+            "Descrizione": "Descrivere le funzionalità del comando" 
+        },
+        {
+            "Nome": "isAutomatico",
+            "Descrizione": "Indica se il comando può essere inviato sul campo tramite automazione,\r\n 0 = modalità automatica disattivata,\r\n 1 = modalità automatica attivata" 
+        },
+        {
+            "Nome": "isManuale",
+            "Descrizione": "Indica se il comando può essere inviato sul campo dall'utente,\r\n 0 = modalità manuale disattivata,\r\n 1 = modalità manuale attivata" 
+        },
+        {
+            "Nome": "Categoria",
+            "Descrizione": "Inserire la categoria del dispositivo dalla lista riportata qui sotto" 
+        }
+    ],
+
+    "strutture": [
+        {
+            "Nome": "Nome",
+            "Descrizione": "Nome del ponte"
+        },
+        {
+            "Nome": "Indirizzo",
+            "Descrizione": "Posizione chilometrica o georeferenziale del ponte"
+        },
+        {
+            "Nome": "Latitudine",
+            "Descrizione": "Posizione cartografica latitudine"
+        },
+        {
+            "Nome": "Longitudine",
+            "Descrizione": "Posizione carografica longitudine"
+        },
+        {
+            "Nome": "Km",
+            "Descrizione": "Posizione chilometrica stradale"
+        },
+        {
+            "Nome": "Referente",
+            "Descrizione": "Responsabile del monitoraggio"
+        }
+    ]
+}
+

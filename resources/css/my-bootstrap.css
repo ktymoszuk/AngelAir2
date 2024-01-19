@@ -1,0 +1,305 @@
+:root {
+    --circle-size: 100px;
+    --circle-font-size: 2.7rem;
+    --axatel-primary: #003560;
+    --axatel-info: #00cac0;
+    --axatel-info-hover: #6bcfca;
+    --axatel-primary-hover: #224d70;
+    --axatel-secondary: #e8e8e8;
+    --axatel-light: #fff;
+    --axatel-light-rgb: rgba(255, 255, 255, 0.9);
+    --axatel-app: #c52317;
+    --axatel-app-hover: #ca3d33;
+    --axatel-app-rgb: rgb(197, 35, 23);
+    --stato-verde: #76dd00;
+    --stato-giallo: #f6ff00;
+    --stato-arancione: #ffa703;
+    --stato-rosso: #ff1803;
+    --colore-bottone-register: #014781;
+    --colore-verde: #67bd06;
+    --colore-verde-hover: #8cc24f;
+    --colore-arancione: #ff9d00;
+    --colore-arancione-hover: #ffae2c;
+    --colore-giallo: #ffd500;
+    --colore-giallo-hover: #ffde38;
+}
+
+.bg-light-primary {
+  background-color: #0035601e !important;
+}
+
+.bg-light-danger {
+  background-color: #c5231727 !important;
+}
+
+.primary-disabled,
+.danger-disabled {
+  cursor: pointer !important;
+  color: #FFFFFF !important;
+}
+.primary-disabled {
+  background-color: #326ea0 !important;
+  outline: none;
+  border: none;
+}
+.danger-disabled {
+  background-color: #c25c54 !important;
+  outline: none;
+  border: none;
+}
+
+.backdrop {
+  width: 100vw !important;
+  height: 100vh !important;
+  background-color: rgba(0, 0, 0, 0.25) !important;
+}
+
+/* TESTO */
+.text-success {
+  color: var(--colore-verde) !important;
+}
+.text-warning {
+  color: var(--colore-arancione) !important;
+}
+.text-danger {
+  color: var(--axatel-app) !important;
+}
+.text-red {
+  color: var(--stato-rosso) !important;
+}
+/* FINE TESTO */
+
+/* BACKGROUND */
+.bg-success {
+  background-color: var(--colore-verde) !important;
+}
+
+.bg-yellow {
+  background-color: var(--colore-giallo) !important;
+}
+
+.bg-danger {
+  background-color: var(--stato-rosso) !important;
+}
+
+.bg-red {
+  background-color: var(--stato-rosso) !important;
+}
+
+.bg-primary {
+  background-color: var(--axatel-primary) !important;
+}
+
+/* FINE BACKGROUND */
+
+/* BORDERS */
+.border-primary {
+  border-color: var(--axatel-primary) !important;
+}
+
+.text-primary {
+  color: var(--axatel-primary) !important;
+}
+
+.border-bold {
+  border: 10px solid #FFFFFF;
+}
+
+.border-danger {
+  border-color: var(--axatel-app) !important;
+}
+
+.border-success {
+  border-color: var(--colore-verde) !important;
+}
+
+/* FINE BORDERS */
+
+/* BOTTONI */
+
+.btn-danger {
+  background-color: var(--axatel-app) !important;
+  border: none;
+  outline: none;
+}
+
+.btn-danger:hover {
+  background-color: var(--axatel-app-hover) !important;
+}
+
+.btn-primary {
+  background-color: var(--axatel-primary) !important;
+  border: none;
+  outline: none;
+}
+
+.btn-primary:hover {
+  background-color: var(--axatel-primary-hover) !important;
+}
+
+.btn-primary:disabled {
+    background-color: rgba(0, 0, 0, .6);
+}
+
+.btn-outline-primary {
+    border-color: var(--axatel-primary) !important;
+    color: var(--axatel-primary) !important;
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--axatel-primary) !important;
+    border-color: var(--axatel-primary) !important;
+    color: #ffffff !important;
+}
+
+.btn-outline-primary:active {
+    background-color: var(--axatel-primary) !important;
+    border-color: var(--axatel-primary) !important;
+    color: #ffffff !important;
+}
+
+input[type="radio"]:checked + .btn-outline-primary {
+    background-color: var(--axatel-primary) !important;
+    border-color: var(--axatel-primary) !important;
+    color: #ffffff !important;
+}
+
+.btn-outline-primary:checked {
+    background-color: var(--axatel-primary) !important;
+    border-color: var(--axatel-primary) !important;
+    color: #ffffff !important;
+}
+
+input[type='checkbox'] {
+    accent-color: red;
+}
+
+  /* Orange button */
+  .btn-orange {
+    border: var(--colore-arancione);
+    background-color: var(--colore-arancione);
+  }
+  .btn-orange:hover {
+    background-color: var(--colore-arancione-hover);
+  }
+
+  .btn-outline-orange {
+    border-color: var(--colore-arancione);
+    color: var(--colore-arancione);
+  }
+  .btn-outline-orange:hover {
+    background-color: var(--colore-arancione);
+    border-color: var(--colore-arancione);
+    color: #ffffff;
+  }
+
+  /* Yellow button */
+  .btn-yellow {
+    border: var(--colore-giallo);
+    background-color: var(--colore-giallo);
+  }
+  .btn-yellow:hover {
+    background-color: var(--colore-giallo-hover);
+  }
+
+  .btn-outline-yellow {
+    border-color: var(--colore-giallo);
+    color: var(--colore-giallo);
+  }
+  .btn-outline-yellow:hover {
+    background-color: var(--colore-giallo);
+    border-color: var(--colore-giallo);
+    color: #ffffff;
+  }
+
+  /* Bottone warning */
+
+  .btn-outline-warning {
+    background-color: #FFFFFF;
+
+    color: #FFC107 !important;
+  }
+  .btn-outline-warning:hover {
+    color: #ffffff !important;
+  }
+
+
+  /* Rosso axatel */
+  .btn-outline-danger {
+    background-color: #FFFFFF;
+
+    border-color: var(--axatel-app) !important;
+  }
+  .btn-outline-danger:hover {
+    background-color: var(--axatel-app) !important;
+    border-color: var(--axatel-app) !important;
+    color: #ffffff !important;
+  }
+
+  /* Bottone verde */
+  .btn-success {
+    background-color: var(--colore-verde) !important;
+    border-color: var(--colore-verde) !important;
+  }
+  .btn-success:hover {
+    background-color: var(--colore-verde-hover) !important;
+  }
+
+  /* Bottone success */
+
+  .btn-outline-success {
+    background-color: #FFFFFF;
+
+    border-color: var(--colore-verde) !important;
+    color: var(--colore-verde) !important;
+  }
+  .btn-outline-success:hover {
+    background-color: var(--colore-verde) !important;
+    border-color: var(--colore-verde) !important;
+    color: #FFFFFF !important;
+  }
+
+  input[type="radio"]:checked + .btn-outline-success {
+    background-color: var(--colore-verde) !important;
+    border-color: var(--colore-verde) !important;
+    color: #ffffff !important;
+  }
+
+
+  /* Bottone info */
+
+  .btn-outline-info {
+    border-color: var(--axatel-info) !important;
+    color: var(--axatel-info) !important;
+  }
+
+  .btn-outline-info:hover {
+    background-color: var(--axatel-info) !important;
+    border-color: var(--axatel-info) !important;
+    color: #ffffff !important;
+  }
+
+  .btn-info {
+    border-color: var(--axatel-info) !important;
+    background-color: var(--axatel-info) !important;
+    color: #FFFFFF;;
+  }
+
+  .btn-info {
+    border-color: var(--axatel-info-hover) !important;
+    background-color: var(--axatel-info-hover) !important;
+  }
+
+  .bg-checkbox:hover {
+    background-color: #fcfcfc;
+  }
+
+  .bg-checked {
+    background-color: #eeeeee;
+  }
+
+  .bg-checked:hover {
+    background-color: #e4e4e4 !important;
+  }
+
+  /* FINE BOTTONI */

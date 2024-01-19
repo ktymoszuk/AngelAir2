@@ -1,0 +1,214 @@
+:root {
+    --axatel-primary: #003560;
+    --axatel-info: #00cac0;
+    --axatel-info-hover: #6bcfca;
+    --axatel-primary-hover: #224d70;
+    --axatel-secondary: #e8e8e8;
+    --axatel-light: #fff;
+    --axatel-light-rgb: rgba(255, 255, 255, 0.9);
+    --axatel-app: #c52317;
+    --axatel-app-rgb: rgb(197, 35, 23);
+    --stato-verde: #76dd00;
+    --stato-giallo: #f6ff00;
+    --stato-arancione: #ffa703;
+    --stato-rosso: #ff1803;
+    --colore-bottone-register: #014781;
+    --colore-verde: #67bd06;
+    --colore-verde-hover: #8cc24f;
+    --colore-arancione: #ff9d00;
+    --colore-arancione-hover: #ffae2c;
+    --colore-giallo: #ffd500;
+    --colore-giallo-hover: #ffde38;
+    --axatel-gray: rgb(108, 117, 125);
+    
+    --circle-size: 100px;
+    --circle-font-size: 2.7rem;
+    --dimensione-cerchio-modal: 2.5rem;
+    --dimensione-pallino: 16px;
+}
+
+.logo-dark {
+    -webkit-filter: invert(100%);
+    filter: invert(100%);
+}
+
+#reader {
+    height: 100vh !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#reader__scan_region,
+#reader__dashboard {
+    background-color: #ffffff3a;
+    width: 400px !important;
+    transform: translateY(-80px);
+}
+
+#reader__scan_region {
+    padding-top: 10px;
+    border-radius: 15px 15px 0 0;
+}
+#reader__dashboard {
+    padding-bottom: 10px;
+    border-radius: 0 0 15px 15px;
+}
+
+/* #html5-qrcode-button-camera-permission {
+    background-color: var(--axatel-primary);
+    color: white;
+    font-weight: 100;
+    text-transform: uppercase;
+    padding: 8px 40px 8px 40px;
+} */
+
+/* navbar */
+.main-nav {
+    background-color: var(--my-secondary);
+    border-bottom: 10px var(--axatel-app) solid;
+}
+
+.list-style-none {
+    list-style: none;
+}
+
+/* Barretta sottolineatura tab nav */
+.with-bar::before {
+    content: "";
+    display: block;
+    height: 10px;
+    width: 100%;
+    position: absolute;
+    bottom: -18px;
+    left: 0;
+}
+
+
+.navbar-selection {
+    color: var(--axatel-app);
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: large;
+    text-shadow: #ffc3c3 3px -1px 5px;
+}
+.dropdown-logout {
+    padding-top: 11px;
+    padding-bottom: 12px;
+    /* top: 0; left: 0; transform:translate(-75%); margin-top: 40px; */
+}
+.dropdown-menu-logout {
+    top: 0;
+    left: 0;
+    transform:translate(-75%);
+    margin-top: 40px;
+}
+
+@media screen and (max-width: 1399px) {
+    .with-bar::before {
+        display: none;
+    }
+}
+@media screen and (min-width: 1400px) {
+    .with-bar::before {
+        background-color: var(--axatel-primary);
+    }
+    
+    .navbar-selection {
+        color: rgba(0, 0, 0, 0.65);
+        font-weight: inherit;
+        text-transform: capitalize;
+        font-size: inherit;
+        text-shadow: none;    
+    }
+
+    .dropdown-logout {
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+
+    .dropdown-menu-logout {
+        margin-top: 35px;
+    }
+    
+}
+
+.cerchio-modal {
+    width: var(--dimensione-cerchio-modal);
+    height: var(--dimensione-cerchio-modal);
+    color: #FFFFFF;
+    background-color: var(--axatel-primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.cursor-pointer {
+    cursor: pointer !important;
+}
+
+.cursor-auto {
+    cursor: auto !important;
+}
+
+.pallino {
+    display: inline-block;
+    width: var(--dimensione-pallino);
+    height: var(--dimensione-pallino);
+    border-radius: 50%;
+}
+
+.overflow-hidden {
+    overflow: hidden;
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.cerchio-cliente {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    overflow: hidden;
+    background-position-x: center;
+    background-repeat: no-repeat;
+}
+
+.text-bw {
+    color: #000000;
+    transition: .5s;
+}
+.text-bw:hover {
+    color: #FFFFFF;
+}
+
+.overlay {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.75);
+    transition: .5s;
+}
+
+.overlay:hover {
+    background-color: rgba(0, 0, 0, 0.65);
+}
+
+.batteria {
+    border: 1px solid #000000;
+    font-weight: normal;
+    margin: 0;
+    padding: 0;
+    width: 30px;
+    height: 45px;
+    font-size: 16px !important;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

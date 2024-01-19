@@ -1,0 +1,7 @@
+{
+    "VSGA_01": {
+        "colonne": ["DataOra", "Numero1", "FloatP1", "FloatP2"],
+        "valori": ["DataOra", "Batteria", "L-Giallo", "L-Rosso"],
+        "comunicazioni": [{"tipo": "minutes", "intervalloPreAllarme": 10, "intervalloAllarme": 20}]
+    }
+}

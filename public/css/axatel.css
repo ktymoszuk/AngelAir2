@@ -1,0 +1,107 @@
+.battery {
+    border: 3px solid #333;
+    width: 18px;
+    height: 28px;
+    padding: 2px;
+    border-radius: 4px;
+    position: relative;
+    margin: 15px 0;
+}
+
+.battery-level {
+    background: #30b455;
+    position: absolute;
+    bottom: 0px;
+    left: 0;
+    right: 0;
+}
+
+.card-situazione:hover {
+    box-shadow: 0px 0px 8px 3px #0772ff;
+    transform: scale(1.05, 1.05);
+    transition: all 0.2s ease-in-out;
+}
+
+/* animazione intro */
+.intro {
+    animation: intro-pulse 3s alternate-reverse 5;
+}
+
+@keyframes intro-pulse {
+    0% {
+        opacity:1;
+    }
+    50% {
+        opacity:0;
+    }
+    100% {
+        opacity:1;
+    }
+}
+
+/* animazioni operative */
+.update {
+    animation: pulse-update 0.4s alternate-reverse 5;
+}
+
+.warning {
+    animation: pulse-warning 0.8s alternate-reverse infinite;
+}
+
+.ko {
+    animation: pulse-ko 0.8s alternate-reverse infinite;
+}
+
+.allarme {
+    animation: pulse-allarme 0.8s alternate-reverse infinite;
+}
+
+@keyframes pulse-update {
+    from { background-color: white; }
+    to { background-color: #5eff00; }
+}
+
+@keyframes pulse-warning {
+    from { background-color: white; }
+    to { background-color: #FFFF00; }
+}
+
+@keyframes pulse-ko {
+    from { background-color: white; }
+    to { background-color: #ff8b07; }
+}
+
+@keyframes pulse-allarme {
+    from { background-color: white; }
+    to { background-color: #FF4136; }
+}
+
+/* animazioni scenario */
+.scenario{
+    animation: scenarioAppears 1s linear;
+    transition: all 0.1s ease-in-out;
+}
+
+.scenario:hover{
+    transform: scale(1.02);
+}
+
+.scenarioAllarme {
+    animation: scenarioAllarme 1s ease-in-out infinite;
+}
+
+.scenarioAllerta {
+    animation: scenarioAppears 1s ease-in-out infinite;
+}
+
+@keyframes scenarioAllarme {
+    0% { box-shadow: 0px 0px 5px 1px transparent; }
+    50% { box-shadow: 0px 0px 5px 3px red; }
+    0% { box-shadow: 0px 0px 5px 1px transparent; }
+}
+
+@keyframes scenarioAppears {
+    0% { box-shadow: 0px 0px 5px 1px transparent; transform: scale(1);}
+    50% { box-shadow: 0px 0px 5px 3px yellow; transform: scale(1.01); }
+    100% { box-shadow: 0px 0px 5px 1px transparent; transform: scale(1); }
+}

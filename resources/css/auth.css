@@ -1,0 +1,422 @@
+:root {
+    --circle-size: 100px;
+    --circle-font-size: 2.7rem;
+    --axatel-primary: #003560;
+    --axatel-info: #00cac0;
+    --axatel-info-hover: #6bcfca;
+    --axatel-primary-hover: #224d70;
+    --axatel-secondary: #e8e8e8;
+    --axatel-light: #fff;
+    --axatel-light-rgb: rgba(255, 255, 255, 0.9);
+    --axatel-app: #c52317;
+    --axatel-app-rgb: rgb(197, 35, 23);
+    --stato-verde: #76dd00;
+    --stato-giallo: #f6ff00;
+    --stato-arancione: #ffa703;
+    --stato-rosso: #ff1803;
+    --colore-bottone-register: #014781;
+    --colore-verde: #67bd06;
+    --colore-verde-hover: #8cc24f;
+    --colore-arancione: #ff9d00;
+    --colore-arancione-hover: #ffae2c;
+    --colore-giallo: #ffd500;
+    --colore-giallo-hover: #ffde38;
+}
+
+/* Card registrazione */
+.register {
+    width: 100%;
+    height: calc(100vh - 56px);
+    background-image: url('http://localhost:8000/immagini/background.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    overflow: auto;
+}
+
+.box-container {
+    position: relative;
+    font-family: sans-serif;
+}
+
+
+.box-container::before {
+    border-radius: 50%;
+    width: 6rem;
+    height: 6rem;
+    top: 30%;
+    right: 7%;
+}
+
+.box-container .box {
+    width: 100%;
+    padding: 1rem;
+    background-color: rgba(29, 29, 29, 0.484);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+    border-radius: 0.7rem;
+    transition: all ease 0.3s;
+}
+
+.box-container .box {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.box-container .box .title {
+    font-size: 1.6rem;
+    letter-spacing: 0.7em;
+    color: #ffffff;
+}
+
+.box-container .box div strong {
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.box-container .box div p {
+    margin: 0;
+    font-size: 0.9em;
+    font-weight: 300;
+    letter-spacing: 0.1em;
+}
+
+.box-container .box div span {
+    font-size: 0.7rem;
+    font-weight: 300;
+}
+
+.box-container .box div span:nth-child(3) {
+    font-weight: 500;
+    margin-right: 0.2rem;
+}
+
+.box-container .box:hover {
+    box-shadow: 0px 0px 20px 1px var(--axatel-primary);
+    border: 1px solid var(--axatel-primary);
+}
+
+.box-hover-red .box:hover {
+    box-shadow: 0px 0px 20px 1px var(--axatel-app);
+    border: 1px solid var(--axatel-app);
+}
+
+/* Fine card registrazione */
+
+/* Input username password e email */
+.input-container {
+    position: relative;
+    margin: 35px auto;
+    width: 300px;
+}
+
+.input-container input[type="text"],
+.input-container input[type="password"],
+.input-container input[type="email"] {
+    font-size: 14px;
+    color: rgb(255, 255, 255);
+    border: none;
+    border-bottom: 2px solid #ffffff;
+    outline: none;
+    width: 100%;
+    background-color: transparent;
+}
+
+.label {
+    transition: all 0.3s ease;
+    color: #ffffff;
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+}
+
+.input-container input[type="text"]:focus~.label,
+.input-container input[type="password"]:focus~.label,
+.input-container input[type="text"]:valid~.label,
+.input-container input[type="password"]:valid~.label {
+    top: -30px;
+    transition: 0.3s;
+    color: #ffffff;
+    font-size: 1.1rem;
+}
+
+.input-container input[type="email"]:focus~.label,
+.input-container input[type="email"]:valid~.label,
+.input-container input[type="email"]:not(:valid):not(:placeholder-shown)~.label {
+    top: -30px;
+    transition: 0.3s;
+    color: #ffffff;
+    font-size: 1.1rem;
+}
+
+
+.input-container .underline {
+    position: absolute;
+    bottom: 4px;
+    left: -30px;
+    height: 2px;
+    width: 116%;
+    background-color: #ffffff;
+    transform: scaleX(0);
+}
+
+.input-container .sideline {
+    position: relative;
+    bottom: 15px;
+    right: 40px;
+    height: 2px;
+    width: 18%;
+    background-color: #ffffff;
+    transform: scaleX(0);
+    rotate: 90deg;
+}
+
+.input-container .upperline {
+    position: absolute;
+    bottom: 30px;
+    left: -30px;
+    height: 2px;
+    width: 116%;
+    background-color: #ffffff;
+    transform: scaleX(0);
+}
+
+.input-container .line {
+    position: relative;
+    bottom: 17px;
+    left: 273px;
+    height: 2px;
+    width: 18%;
+    background-color: #ffffff;
+    transform: scaleX(0);
+    rotate: 90deg;
+}
+
+.input-container input[type="text"]:focus~.underline,
+.input-container input[type="email"]:focus~.underline,
+.input-container input[type="password"]:focus~.underline,
+.input-container input[type="text"]:valid~.underline,
+.input-container input[type="email"]:valid~.underline,
+.input-container input[type="password"]:valid~.underline {
+    transform: scaleX(1);
+    transition: 1s;
+}
+
+.input-container input[type="email"]:focus~.underline,
+.input-container input[type="email"]:not(:valid):not(:placeholder-shown)~.underline {
+    transform: scaleX(1);
+    transition: 1s;
+}
+
+
+.input-container input[type="text"]:focus~.sideline,
+.input-container input[type="email"]:focus~.sideline,
+.input-container input[type="password"]:focus~.sideline,
+.input-container input[type="text"]:valid~.sideline,
+.input-container input[type="email"]:valid~.sideline,
+.input-container input[type="password"]:valid~.sideline {
+    transform: scaleX(1);
+    transition: 1s;
+}
+
+.input-container input[type="email"]:focus~.sideline,
+.input-container input[type="email"]:not(:valid):not(:placeholder-shown)~.sideline {
+    transform: scaleX(1);
+    transition: 1s;
+}
+
+.input-container input[type="text"]:focus~.upperline,
+.input-container input[type="email"]:focus~.upperline,
+.input-container input[type="password"]:focus~.upperline,
+.input-container input[type="text"]:valid~.upperline,
+.input-container input[type="email"]:valid~.upperline,
+.input-container input[type="password"]:valid~.upperline {
+    transform: scaleX(1);
+    transition: 1s;
+}
+
+.input-container input[type="email"]:focus~.upperline,
+.input-container input[type="email"]:not(:valid):not(:placeholder-shown)~.upperline {
+    transform: scaleX(1);
+    transition: 1s;
+}
+
+.input-container input[type="text"]:focus~.line,
+.input-container input[type="email"]:focus~.line,
+.input-container input[type="password"]:focus~.line,
+.input-container input[type="text"]:valid~.line,
+.input-container input[type="email"]:valid~.line,
+.input-container input[type="password"]:valid~.line {
+    transform: scaleX(1);
+    transition: 1s;
+}
+
+.input-container input[type="email"]:focus~.line,
+.input-container input[type="email"]:not(:valid):not(:placeholder-shown)~.line {
+    transform: scaleX(1);
+    transition: 1s;
+}
+
+/* Fine input username e email */
+
+/* Pulsante registrazione */
+.button2 {
+    display: inline-block;
+    transition: all 0.2s ease-in;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    color: #090909;
+    padding: 0.2em 4em;
+    font-size: 15px;
+    font-weight: 100;
+    text-transform: uppercase;
+    border-radius: 0.5em;
+    background: #e8e8e8;
+    border: 1px solid #e8e8e8;
+    box-shadow: 0px 0px 25px #ffffff;
+}
+
+.button2:active {
+    color: #666;
+    box-shadow: inset 4px 4px 12px #c5c5c5, inset -4px -4px 12px #ffffff;
+}
+
+.button2:before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%) scaleY(1) scaleX(1.25);
+    top: 100%;
+    width: 140%;
+    height: 180%;
+    background-color: rgba(0, 0, 0, 0.05);
+    border-radius: 50%;
+    display: block;
+    transition: all 0.5s 0.1s cubic-bezier(0.55, 0, 0.1, 1);
+    z-index: -1;
+}
+
+.button2:after {
+    content: "";
+    position: absolute;
+    left: 55%;
+    transform: translateX(-50%) scaleY(1) scaleX(1.45);
+    top: 180%;
+    width: 160%;
+    height: 190%;
+    background-color: var(--axatel-primary);
+    border-radius: 50%;
+    display: block;
+    transition: all 0.5s 0.1s cubic-bezier(0.55, 0, 0.1, 1);
+    z-index: -1;
+}
+
+.button2-red:after {
+    content: "";
+    position: absolute;
+    left: 55%;
+    transform: translateX(-50%) scaleY(1) scaleX(1.45);
+    top: 180%;
+    width: 160%;
+    height: 190%;
+    background-color: var(--axatel-primary);
+    border-radius: 50%;
+    display: block;
+    transition: all 0.5s 0.1s cubic-bezier(0.55, 0, 0.1, 1);
+    z-index: -1;
+}
+
+.button2-red:after {
+    background-color: var(--axatel-app);
+}
+
+.button2:hover {
+    color: #ffffff;
+    border: 1px solid var(--axatel-primary);
+}
+
+.button2-red:hover {
+    color: #ffffff;
+    border: 1px solid var(--axatel-app);
+}
+
+.button2:hover:before {
+    top: -35%;
+    background-color: var(--axatel-primary);
+    transform: translateX(-50%) scaleY(1.3) scaleX(0.8);
+}
+
+.button2-red:hover:before {
+    background-color: var(--axatel-app);
+}
+
+.button2:hover:after {
+    top: -45%;
+    background-color: var(--axatel-primary);
+    transform: translateX(-50%) scaleY(1.3) scaleX(0.8);
+}
+
+.button2-red:hover:after {
+    background-color: var(--axatel-app);
+}
+
+/* Fine pulsante registrazione */
+
+/* Pallini volanti */
+.circle {
+    width: 100px;
+    height: 100px;
+    background: radial-gradient(#fd3c2e, var(--axatel-app));
+    border-radius: 50%;
+    position: absolute;
+    animation: move-up6 20s ease-in infinite alternate-reverse;
+}
+
+.circle-blu {
+    background: radial-gradient(#0d60a3, var(--axatel-primary));
+}
+
+.circle:nth-child(1) {
+    top: -25px;
+    left: -25px;
+}
+
+.circle:nth-child(2) {
+    bottom: -25px;
+    right: -25px;
+    animation-name: move-down1;
+}
+
+@keyframes move-up6 {
+    10% {
+        transform: translateY(300px);
+    }
+
+    60% {
+        transform: translateX(300px);
+    }
+
+    100% {
+        transform: translateY(300px);
+    }
+}
+
+@keyframes move-down1 {
+    0% {
+        transform: translateY(-300px);
+    }
+
+    40% {
+        transform: translateX(-300px);
+    }
+
+    90% {
+        transform: translateY(-300px);
+    }
+}
+
+/* Fine pallini volanti */
