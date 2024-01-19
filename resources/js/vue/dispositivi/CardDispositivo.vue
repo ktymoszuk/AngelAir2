@@ -1,41 +1,60 @@
 <template>
     <div class="container-fluid">
         <div class="row shadow mt-5 rounded-5"
-        :class="{ 'galleria-card-1': dispositivo.isAllarme, 'galleria-card-2': !dispositivo.isAllarme }"
+        :class="{ 'elemento-card-1': dispositivo.StatoComunicazioni === 0, 'elemento-card-2': dispositivo.StatoComunicazioni === 1, 'elemento-card-4': dispositivo.StatoComunicazioni === 2 }"
         >
-            <div class="col-12 col-sm-4 col-lg-2 col-xxl-2 d-flex align-items-center justify-content-center py-3 position-relative"
+            <div class="col-12 col-sm-4 col-lg-2 col-xxl-2 d-flex align-items-center justify-content-center py-3"
                 data-bs-toggle="collapse" :data-bs-target="'#d-' + chiave" aria-expanded="true" style="cursor: pointer;">
                 <div class="container-allerta">
-                    <div class="box-allerta-1 p-1" :class="dispositivo.isAbilitato ? 'color-allerta-1' : 'color-allerta-4'">
+                    <div class="box-allerta-1 p-1" :class="{ 'color-allerta-1': dispositivo.StatoComunicazioni === 0, 'color-allerta-2': dispositivo.StatoComunicazioni === 1, 'color-allerta-4': dispositivo.StatoComunicazioni === 2 }">
                         <div class="w-75 h-75 rounded-circle d-flex justify-content-center align-items-center" style="z-index: 10; overflow: hidden">
-                            <img v-if="dispositivo.tipodispositivo.Logo" :src="asset + 'immagini/' + dispositivo.tipodispositivo.Logo" class="w-100" />
-                            <img v-else :src="asset + 'immagini/axatel.png'" class="w-100" />
+                            <span class="fs-1 text-uppercase" style="margin-top: -8px;">{{ dispositivo.Differenza }}</span>
+                                <span class="fs-5 mt-3">minuti fa</span>
                         </div>
                     </div>
                 </div>
-                <span class="position-absolute fs-5 fw-light text-uppercase mb-2 mb-md-3 mb-lg-4 circle-span-style" style="top: 50%; left: 50%; transform: translateX(-50%); margin-top: 25px;">
-                    <span v-if="dispositivo.isAbilitato">Abilitato</span>
-                    <span v-else>Disabilitato</span>
-                </span>
             </div>
-            <div class="col-12 col-sm-8 col-lg-5 col-xl-6 p-0 d-flex flex-column justify-content-center text-end text-md-center text-lg-start py-3 pe-5 ps-lg-5"
+            <div class="col-12 col-sm-8 col-lg-5 col-xl-6 p-0 d-flex flex-column justify-content-center text-end text-md-center text-lg-start py-3"
                 data-bs-toggle="collapse" :data-bs-target="'#d-' + chiave" aria-expanded="true" style="cursor: pointer;">
-                <h2 class="text-uppercase fw-light pt-3">
+                <h2 class="text-uppercase text-center text-md-start fw-light">
                     {{ dispositivo.Nome }}
                 </h2>
-                <h3 v-if="dispositivo.struttura" class="fw-light">
-                    {{ dispositivo.struttura.Nome }}
-                </h3>
-                <p class="text-uppercase m-0 pb-3">
+                <h4 v-if="dispositivo.CodiceStazione" class="text-uppercase text-center text-md-start fw-light">
+                    <span>
+                        {{ dispositivo.CodiceStazione }}
+                    </span>
+                </h4>
+                <p class="text-uppercase text-center text-md-start fw-light">
                     DevEui: <span class="fw-bold">{{ dispositivo.DevEui }}</span>
                 </p>
+                <h5 class="text-uppercase text-center text-md-start fw-light">
+                    <span>
+                        Ultimo pacchetto <span class="fw-normal">{{ dispositivo.DataUltimoPacchetto }}</span>
+                    </span>
+                </h5>
             </div>
             <div class="col-12 col-lg-5 col-xl-4 d-flex justify-content-center justify-content-lg-end align-items-center mt-4 mt-lg-0 ps-0 pe-5 pb-4 pb-lg-0">
                 <div class="container-fluid">
                     <div class="row ms-4">
-    
+
                         <!-- MODIFICA DISPOSITIVO -->
-                        <div class="col-6">
+                        <div class="col-4 px-1">
+    
+                            <!-- Bottone -->
+                            <button type="button" class="btn btn-success m-1 w-100" id="btnModifica" data-bs-toggle="modal"
+                                :data-bs-target="'#' + modalIdModifica + chiave">
+                                DETTAGLI
+                            </button>
+                            <!-- Modal -->
+                            <!-- <modifica :modal-id="modalIdModifica" :titolo="'il dispositivo ' + dispositivo.Nome" :route="routeModificaDispositivo" :chiave="chiave" :modifica-id="dispositivo.id">
+                                <template v-slot:inputModifica>
+                                    <input-modifica :dispositivo="dispositivo" :strutture="strutture" :categorie-dispositivi="categorieDispositivi" :isAbilitato="dispositivo.isAbilitato"></input-modifica>
+                                </template>
+                            </modifica> -->
+                        </div>
+
+                        <!-- MODIFICA DISPOSITIVO -->
+                        <div class="col-4 px-1">
     
                             <!-- Bottone -->
                             <button type="button" class="btn btn-primary m-1 w-100" id="btnModifica" data-bs-toggle="modal"
@@ -51,7 +70,7 @@
                         </div>
     
                         <!-- ELIMINA DISPOSITIVO -->
-                        <div class="col-6">
+                        <div class="col-4 px-1">
     
                             <!-- Bottone -->
                             <button type="button" class="btn btn-danger m-1 w-100" id="btnCancella" data-bs-toggle="modal" :data-bs-target="'#' + modalIdElimina + chiave">

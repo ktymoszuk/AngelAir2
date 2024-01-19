@@ -192,9 +192,7 @@ export default {
                 ];
     
                 
-                this.strutture = await getRequest(this.routeDatiStrutture, null, null, null);
-                
-                this.categorieDispositivi = await getRequest(this.routeDatiTipodisp, null, null, null);
+                // this.categorieDispositivi = await getRequest(this.routeDatiTipodisp, null, null, null);
     
                 this.dispositiviPaginati();
                 this.caricamento = false;
@@ -210,6 +208,7 @@ export default {
                 this.dispositivi = await getRequest(this.routeDatiDispositivi + '?page=' + page, {
                     'testo': testo,
                 }, null);
+                console.log(this.dispositivi);
                 this.aggiornamento = false;
             } catch (e) {
                 console.log(e);

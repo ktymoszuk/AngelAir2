@@ -17,6 +17,7 @@ use App\Models\Soglia;
 use App\Models\TipoDispositivo;
 use App\Models\CategoriaDispositivo;
 use App\Models\CategoriaSoglia;
+use App\Models\StatoDisp;
 class TabelleController extends Controller
 {
 
@@ -98,13 +99,10 @@ class TabelleController extends Controller
     }
     
     public function dispositiviPaginati(Request $request) {
-
-        $struttura = null;
+        $adesso = Carbon::now()->setTimezone('Europe/Rome');
+        
         $categoriaDisp = null;
         $testo = $request->testo;
-        if (isset($request->struttura)) {
-            $struttura = $request->struttura;
-        }
         if (isset($request->categoriadisp)) {
             $categoriaDisp = $request->categoriadisp;
         }
@@ -112,8 +110,7 @@ class TabelleController extends Controller
             $testo = $request->testo;
         }
         
-        $query = Dispositivo::with("struttura", "tipodispositivo", "sogliadispositivo", "comandodispositivo")
-        ->orderBy("isAllarme", "DESC");
+        $query = Dispositivo::with("tipodispositivo");
 
         if (!empty($categoriaDisp)) {
             $query->where("codTipoDisp", $categoriaDisp);
@@ -123,42 +120,45 @@ class TabelleController extends Controller
             $query->where("Nome", 'LIKE', '%' . $testo . '%');
         }
 
-        if (!empty($struttura)) {
-            $query->where("codStruttura", $struttura);
-        }
 
-        if (!empty($testo)) {
-            $query->where("Nome", "LIKE", "%$testo%");
-        }
+        $dispositivi = $query->orderBy('Nome')->paginate(100);
 
-        if (Auth::user()->isAssistenza != 1) {
+        $statodisp = StatoDisp::orderBy('DataOra', 'DESC')->get();
+        foreach ($dispositivi as $key => $dispositivo) {
+            foreach ($statodisp as $d => $dato) {
+                if ($dispositivo->DevEui == $dato->DevEui) {
+                    $dispositivo->DataUltimoPacchetto = $dato->DataOra;
+                    $data = Carbon::parse($dato->DataOra);
+                    $diff = $data->diffInMinutes($adesso);
+                    $dispositivo->Differenza = $diff;
 
-            $auth1 = (int)Auth::user()->id_1liv;
-            $auth2 = (int)Auth::user()->id_2liv;
-            $auth3 = (int)Auth::user()->id_3liv;
-            $auth4 = (int)Auth::user()->id_4liv;
+                    // CASO GAS - 30 min
+                    if ($dispositivo->codTipoDisp == 1) {
+                        if ($diff <= 32) {
+                            $dispositivo->StatoComunicazioni = 0;
+                        } else if ($diff > 32 && $diff <= 65) {
+                            $dispositivo->StatoComunicazioni = 1;
+                        } else if ($diff > 65 && $diff) {
+                            $dispositivo->StatoComunicazioni = 2;
+                        }
+                    }
+                    // CASO METEO - 60 min
+                    if ($dispositivo->codTipoDisp == 2) {
+                        if ($diff <= 62) {
+                            $dispositivo->StatoComunicazioni = 0;
+                        } else if ($diff > 62 && $diff <= 125) {
+                            $dispositivo->StatoComunicazioni = 1;
+                        } else if ($diff > 125 && $diff) {
+                            $dispositivo->StatoComunicazioni = 2;
+                        }
+                    }
 
-            
-            if ($auth4 != null) {
-                $query->where("id_1liv", $auth1)
-                ->where("id_2liv", $auth2)
-                ->where("id_3liv", $auth3)
-                ->where("id_4liv", $auth4);
-            } else if ($auth3 != null) {
-                $query->where("id_1liv", $auth1)
-                ->where("id_2liv", $auth2)
-                ->where("id_3liv", $auth3);
-            } else if ($auth2 != null) {
-                $query->where("id_2liv", $auth2)
-                ->where("id_1liv", $auth1);
-            } else if ($auth1 != null) {
-                $query->where("id_1liv", $auth1);
+                    break;
+                }
             }
         }
 
-        $res = $query->orderBy('Nome')->paginate(100);
-
-        return response()->json($res);
+        return response()->json($dispositivi);
     }
 
     public function utenti() {
