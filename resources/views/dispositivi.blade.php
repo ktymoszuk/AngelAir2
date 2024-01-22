@@ -7,6 +7,7 @@
 </div>
 
 <dispositivi
+    route-dispositivo="{{ route('dispositivo') }}"
     route-soglia-dispositivi="{{ route('soglia_dispositivi') }}"
     route-comando-dispositivi="{{ route('comando_dispositivi') }}"
     route-download-excel="{{ route('download_excel_dispositivi') }}"

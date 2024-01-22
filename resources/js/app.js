@@ -33,6 +33,9 @@ import Strutture from './vue/strutture/Strutture.vue';
 // DISPOSITIVI
 import Dispositivi from './vue/dispositivi/Dispositivi.vue';
 
+// DETTAGLIO DISPOSIRTIVO
+import Dettaglio from './vue/dettaglio/Dettaglio.vue';
+
 // COMANDI DISPOSITIVI
 import ComandiDispositivi from './vue/dispositivi/comandi/ComandiDispositivi.vue';
 
@@ -69,6 +72,7 @@ createApp({
         Comandi,
         Strutture,
         Dispositivi,
+        Dettaglio,
         ComandiDispositivi,
         SoglieDispositivi,
         Soglie,

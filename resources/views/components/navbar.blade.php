@@ -59,7 +59,7 @@
                 </a>
                 <div class="d-flex align-items-center position-relative">
                     <a type="button" class="btn btn-light nav-link rounded-start-5 rounded-end-0 ps-0 {{ request()->is('profilo*') ? 'with-bar navbar-selection' : '' }} p-2" href="{{ route('profilo') }}">
-                        <span class="axatel-link ps-2 d-inline-block py-0">{{ Auth::user()->name }}</span>
+                        <span class="axatel-link ps-2 d-inline-block py-0">Karolina</span>
                     </a>
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <div class="btn-group">

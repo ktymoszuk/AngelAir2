@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Carbon\Carbon;
-
+use Illuminate\Pagination\Paginator;
 // MODELS
 use App\Models\Automazione;
 use App\Models\Struttura;
@@ -121,35 +121,35 @@ class TabelleController extends Controller
         }
 
 
-        $dispositivi = $query->orderBy('Nome')->paginate(100);
+        $dispositivi = $query->orderBy('Nome')->get()->toArray();
 
         $statodisp = StatoDisp::orderBy('DataOra', 'DESC')->get();
         foreach ($dispositivi as $key => $dispositivo) {
             foreach ($statodisp as $d => $dato) {
-                if ($dispositivo->DevEui == $dato->DevEui) {
-                    $dispositivo->DataUltimoPacchetto = $dato->DataOra;
+                if ($dispositivi[$key]['DevEui'] == $dato->DevEui) {
+                    $dispositivi[$key]['DataUltimoPacchetto'] = $dato->DataOra;
                     $data = Carbon::parse($dato->DataOra);
                     $diff = $data->diffInMinutes($adesso);
-                    $dispositivo->Differenza = $diff;
+                    $dispositivi[$key]['Differenza'] = $diff;
 
                     // CASO GAS - 30 min
-                    if ($dispositivo->codTipoDisp == 1) {
+                    if ($dispositivi[$key]['codTipoDisp'] == 1) {
                         if ($diff <= 32) {
-                            $dispositivo->StatoComunicazioni = 0;
+                            $dispositivi[$key]['StatoComunicazioni'] = 0;
                         } else if ($diff > 32 && $diff <= 65) {
-                            $dispositivo->StatoComunicazioni = 1;
+                            $dispositivi[$key]['StatoComunicazioni'] = 1;
                         } else if ($diff > 65 && $diff) {
-                            $dispositivo->StatoComunicazioni = 2;
+                            $dispositivi[$key]['StatoComunicazioni'] = 2;
                         }
                     }
                     // CASO METEO - 60 min
-                    if ($dispositivo->codTipoDisp == 2) {
+                    if ($dispositivi[$key]['codTipoDisp'] == 2) {
                         if ($diff <= 62) {
-                            $dispositivo->StatoComunicazioni = 0;
+                            $dispositivi[$key]['StatoComunicazioni'] = 0;
                         } else if ($diff > 62 && $diff <= 125) {
-                            $dispositivo->StatoComunicazioni = 1;
+                            $dispositivi[$key]['StatoComunicazioni'] = 1;
                         } else if ($diff > 125 && $diff) {
-                            $dispositivo->StatoComunicazioni = 2;
+                            $dispositivi[$key]['StatoComunicazioni'] = 2;
                         }
                     }
 
@@ -157,6 +157,10 @@ class TabelleController extends Controller
                 }
             }
         }
+
+        usort($dispositivi, function($a, $b) {
+            return strcmp($b['StatoComunicazioni'], $a['StatoComunicazioni']);
+        });
 
         return response()->json($dispositivi);
     }

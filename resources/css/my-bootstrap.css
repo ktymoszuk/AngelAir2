@@ -239,7 +239,8 @@ input[type='checkbox'] {
   /* Bottone verde */
   .btn-success {
     background-color: var(--colore-verde) !important;
-    border-color: var(--colore-verde) !important;
+    border: none;
+    outline: none;
   }
   .btn-success:hover {
     background-color: var(--colore-verde-hover) !important;

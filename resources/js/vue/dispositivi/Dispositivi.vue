@@ -56,12 +56,29 @@
                 <loader/>
             </template>
             <template v-else>
+                <!-- Quanti dispositivi in allarme/allerta ci sono -->
+                <div id="alertAllarmi" class="row fs-4 fw-light justify-content-end">
+                    <div class="col-12 col-md-6 shadow rounded-bottom-4 rounded-start-4 px-0 overflow-hidden me-2">
+                        <div v-if="dispositiviInAllarme.length > 0" class="d-flex align-items-center justify-content-between text-uppercase py-2 ps-4 pe-3 colore-card-4">
+                            <span>
+                                {{ dispositiviInAllarme.length }} dispositivi in allarme
+                            </span>
+                            <button type="button"  class="btn-close fs-6" @click="chiudiAlert"></button>
+                        </div>
+                        <div v-if="dispositiviInAllerta.length >= 0" class="text-start text-uppercase py-2 px-4 colore-card-2">
+                            <span>
+                                {{ dispositiviInAllerta.length }} dispositivi in allerta
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Elendo dei dispositivi -->
                 <template v-if="dispositivi != null">
-                    <section v-if="dispositivi.data && dispositivi.data.length > 0" class="container-fluid mb-5 pb-5 px-0">
+                    <section v-if="dispositivi && dispositivi.length > 0" class="container-fluid mb-5 pb-5 px-0">
     
                         <!-- Card dei dispositivi -->
-                        <template v-for="(dispositivo, v) in dispositivi.data" >
-                            <card-dispositivo :asset="asset" :dispositivo="dispositivo" :chiave="v" :route-elimina-dispositivo="routeEliminaDispositivo" :route-modifica-dispositivo="routeModificaDispositivo" :strutture="strutture" :categorie-dispositivi="categorieDispositivi" :route-elimina-soglia-dispositivo="routeEliminaSogliaDispositivo" :route-elimina-comando-dispositivo="routeEliminaComandoDispositivo"></card-dispositivo>
+                        <template v-for="(dispositivo, v) in dispositivi" >
+                            <card-dispositivo :route-dettagli-dispositivo="routeDispositivo + '?deveui=' + dispositivo.DevEui" :asset="asset" :dispositivo="dispositivo" :chiave="v" :route-elimina-dispositivo="routeEliminaDispositivo" :route-modifica-dispositivo="routeModificaDispositivo" :strutture="strutture" :categorie-dispositivi="categorieDispositivi" :route-elimina-soglia-dispositivo="routeEliminaSogliaDispositivo" :route-elimina-comando-dispositivo="routeEliminaComandoDispositivo"></card-dispositivo>
                         </template>
                         
                         <!-- Paginazione -->
@@ -107,6 +124,8 @@ export default {
             categorieDispositivi: null,
             caricamento: null,
             testo: '',
+            dispositiviInAllarme: [],
+            dispositiviInAllerta: [],
             aggiornamento: null
         }
     },
@@ -150,6 +169,9 @@ export default {
         'routeDownloadExcel': {
             required: true,
         },
+        'routeDispositivo': {
+            required: false,
+        },
         'asset': {
             required: true,
         },
@@ -173,6 +195,7 @@ export default {
             try {
                 this.caricamento = true;
                 this.aggiornamento = true;
+
                 this.bottoni = [
                     {
                         'tipo': 'modal',
@@ -195,8 +218,6 @@ export default {
                 // this.categorieDispositivi = await getRequest(this.routeDatiTipodisp, null, null, null);
     
                 this.dispositiviPaginati();
-                this.caricamento = false;
-                this.aggiornamento = false;
             } catch (e) {
                 console.log(e);
             }
@@ -208,12 +229,29 @@ export default {
                 this.dispositivi = await getRequest(this.routeDatiDispositivi + '?page=' + page, {
                     'testo': testo,
                 }, null);
-                console.log(this.dispositivi);
+                this.dispositiviInAllarme = [];
+                this.dispositiviInAllerta = [];
+                const array = Object.values(this.dispositivi);
+                array.forEach(dispositivo => {
+                    if (this.dispositivi.StatoComunicazioni == 1) {
+                        this.dispositiviInAllerta.push(dispositivo.id);
+                    } else if ( dispositivo.StatoComunicazioni == 2 ) {
+                        this.dispositiviInAllarme.push(dispositivo.id);
+                    }
+                });
+                // console.log(array);
+                
+                this.caricamento = false;
                 this.aggiornamento = false;
+
             } catch (e) {
                 console.log(e);
             }
         },
+        chiudiAlert() {
+            const alert = document.getElementById('alertAllarmi');
+            alert.classList.add('d-none');
+        }
     }
 }
 </script>
