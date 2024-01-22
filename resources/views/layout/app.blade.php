@@ -13,7 +13,9 @@
 
 <body class="container-intro d-flex flex-column h-100">
 
-@include("components.navbar")
+@if(Auth::id() != null && Auth::user()->isAbilitato == 1)
+    @include("components.navbar")
+@endif
 
 <div id="app">
     @yield('content')

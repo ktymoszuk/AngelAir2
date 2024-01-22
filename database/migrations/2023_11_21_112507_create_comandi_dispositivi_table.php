@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
+class CreateComandiDispositiviTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,23 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::connection('mysql')->create('ComandiDispositivi', function (Blueprint $table) {
-            
+        Schema::create('ComandiDispositivi', function (Blueprint $table) {
             $table->id();
-            
+
+            //AxId automazione
+            $table->char('AxId', 30)->nullable();
+
+            //AxAppTag automazione
+            $table->string('AxAppTag', 8)->nullable();
+
+            //AxSystemTag automazione
+            $table->string('AxSystemTag', 15)->nullable();
+
             //Chiave esterna comando 
-            $table->integer('codComando')->nullable();
+            $table->bigInteger('codComando')->nullable();
 
             //Chiave esterna dispositivo
-            $table->integer('codDispositivo')->nullable();
-
+            $table->bigInteger('codDispositivo')->nullable();
         });
     }
 
@@ -35,4 +42,4 @@ return new class extends Migration
     {
         Schema::dropIfExists('ComandiDispositivi');
     }
-};
+}

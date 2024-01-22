@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::connection('mysql2')->create('AnaGateways', function (Blueprint $table) {
+        Schema::create('AnaGateways', function (Blueprint $table) {
 
             $table->id();
 
@@ -41,6 +41,12 @@ return new class extends Migration
             
             //Posizione del gateway
             $table->string('Indirizzo', 250)->nullable();
+
+            // Stato connessione gateway
+            $table->tinyInteger("Connected")->default(0);
+
+            // Ultima comunicazione gateway
+            $table->timestamp("DataOra");
 
             $table->text('Note')->nullable();
 

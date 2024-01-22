@@ -1,10 +1,7 @@
 <template>
     <div class="container-fluid">
-        <form :action="routeDettagliDispositivo" method="GET" class="row shadow mt-5 rounded-5"
-        :class="{ 'elemento-card-1': dispositivo.StatoComunicazioni === 0, 'elemento-card-2': dispositivo.StatoComunicazioni === 1, 'elemento-card-4': dispositivo.StatoComunicazioni === 2 }"
-        >
-            <div class="col-12 col-sm-4 col-lg-2 col-xxl-2 d-flex align-items-center justify-content-center py-3"
-                data-bs-toggle="collapse" :data-bs-target="'#d-' + chiave" aria-expanded="true" style="cursor: pointer;">
+        <form :action="routeDettagliDispositivo" method="GET" class="row shadow mt-5 rounded-5">
+            <div class="col-12 col-sm-4 col-lg-2 col-xxl-2 d-flex align-items-center justify-content-center py-3" data-bs-toggle="collapse" :data-bs-target="'#d-' + chiave" aria-expanded="true">
                 <div class="container-allerta">
                     <div class="box-allerta-1 p-1" :class="{ 'color-allerta-1': dispositivo.StatoComunicazioni === 0, 'color-allerta-2': dispositivo.StatoComunicazioni === 1, 'color-allerta-4': dispositivo.StatoComunicazioni === 2 }">
                         <div class="w-75 h-75 rounded-circle d-flex justify-content-center align-items-center" style="z-index: 10; overflow: hidden">
@@ -15,7 +12,7 @@
                 </div>
             </div>
             <div class="col-12 col-sm-8 col-lg-5 col-xl-6 p-0 d-flex flex-column justify-content-center text-end text-md-center text-lg-start py-3"
-                data-bs-toggle="collapse" :data-bs-target="'#d-' + chiave" aria-expanded="true" style="cursor: pointer;">
+                data-bs-toggle="collapse" :data-bs-target="'#d-' + chiave" aria-expanded="true">
                 <h2 class="text-uppercase text-center text-sm-start fw-light mb-0">
                     {{ dispositivo.Nome }}
                 </h2>

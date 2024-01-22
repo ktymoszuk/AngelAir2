@@ -13,29 +13,24 @@ return new class extends Migration
      */
     public function up()
     {   
-        Schema::connection('mysql2')->create('Ana1Liv', function (Blueprint $table) {
+        Schema::create('Ana1Liv', function (Blueprint $table) {
 
             $table->id('id_1liv');
 
-            //Categoria azienda
-            $table->string('RagioneSociale', 100)->nullable();
+            //Nome azienda
+            $table->string('RagioneSociale', 50)->nullable();
           
             //Logo dell'azienda
-            $table->string('LogoAziendale', 150)->nullable();
+            $table->string('LogoAziendale', 200)->nullable();
            
             //Indirizzo del network server
-            $table->string('NSAddress', 150)->nullable();
+            $table->string('NSAddress', 100)->nullable();
            
             //Identificatvio applicazione network server 
             $table->string('AppID', 16)->nullable();
-
-            //Coordinate dell'azienda
-            $table->decimal('Latitudine', 12, 7)->nullable();
-            $table->decimal('Longitudine', 12, 7)->nullable();
            
             //Azienda attiva nel sistema
-            $table->tinyInteger('Attivo')->default(1);
-
+            $table->boolean('Attivo')->default(0);
         });
     }
 

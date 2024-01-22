@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
+class CreateCategorieSoglieTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::connection('mysql')->create('InvioComandi', function (Blueprint $table) {
-
+        Schema::create('CategorieSoglie', function (Blueprint $table) {
             $table->id();
-
-            $table->string('Codice', 100)->nullable();
-            $table->string('Deveui', 16)->nullable();
-            $table->boolean('isElaborato')->default(0);
             
+            // Nome categoria
+            $table->string("Nome", 50);
+
+            // Colore associato alla categoria
+            $table->string("Colore", 10);
         });
     }
 
@@ -31,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('InvioComandi');
+        Schema::dropIfExists('CategorieSoglie');
     }
-};
+}

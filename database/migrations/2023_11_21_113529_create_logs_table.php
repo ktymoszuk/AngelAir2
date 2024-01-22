@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
+class CreateLogsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,18 +13,26 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::connection('mysql')->create('Logs', function (Blueprint $table) {
-           
+        Schema::create('Logs', function (Blueprint $table) {
             $table->id();
-            
+
+            // id nel sistema
+            $table->char('AxId', 30)->nullable();
+
+            //AxAppTag automazione
+            $table->string('AxAppTag', 8)->nullable();
+
+            //AxSystemTag automazione
+            $table->string('AxSystemTag', 15)->nullable();
+
             //Codice identificativo log
             $table->string('Codice', 16)->nullable();
 
             //Chiave esterna utente
-            $table->integer('codUtente')->deafult(0);
+            $table->bigInteger('codUtente')->deafult(0);
 
             //Chiave esterna struttura
-            $table->integer('codStruttura')->nullable();
+            $table->bigInteger('codStruttura')->nullable();
 
             //Messaggio descrittivo log
             $table->text('Messaggio')->nullable();
@@ -43,4 +51,4 @@ return new class extends Migration
     {
         Schema::dropIfExists('Logs');
     }
-};
+}

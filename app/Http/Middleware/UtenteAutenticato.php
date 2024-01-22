@@ -19,9 +19,9 @@ class UtenteAutenticato
      */
     public function handle(Request $request, Closure $next)
     {
-        // if (Auth::id() != null) {
-        //     return redirect()->route('dashboard');
-        // }
+        if (Auth::id() != null) {
+            return redirect()->route('dashboard');
+        }
 
         return $next($request);
     }

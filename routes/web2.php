@@ -21,6 +21,7 @@ use App\Http\Controllers\ComandiDispositiviController;
 use App\Http\Controllers\MonitoraggioController;
 use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\ArchivioController;
+use App\Http\Controllers\DettagliController;
 
 
 
@@ -36,19 +37,19 @@ use App\Http\Controllers\ArchivioController;
 */
 
 // intro
-Route::view('/', 'index')->middleware("utenteAutenticato")->name('index');
+Route::view('/', 'index')->name('index');
 
 // errore
 Route::view('/errore', 'errore')->name('errore');
 
-Route::middleware(['utenteAutenticato'])->group(function () {
+// Route::middleware(['utenteAutenticato'])->group(function () {
     
     // AUTH FORTIFY
     Route::view("/register", "auth.register")->name("register"); // pagina registrazione
     Route::view("/login", "auth.login")->name("login"); // pagina registrazione
-});
+// });
 
-Route::middleware(['utente'])->group(function () {
+// Route::middleware(['utente'])->group(function () {
 
     // dashboard
     Route::get("/dashboard", [DashboardController::class, "index"])->name("dashboard"); // dashboard
@@ -92,6 +93,12 @@ Route::middleware(['utente'])->group(function () {
     Route::post("/dispositivi/modifica", [DispositiviController::class, 'update'])->name('modifica_dispositivo');
     Route::post("/dispositivi/elimina", [DispositiviController::class, 'delete'])->name('elimina_dispositivo');
     Route::get("/dispositivi/download", [DispositiviController::class, "download"])->name('download_excel_dispositivi');  //rotta per il download del csv
+
+    // Dettagli dispositivo
+    Route::get("/dispositivo", [DettagliController::class, "dettagli"])->name("dispositivo");
+    Route::get("/dispositivo/dati", [DettagliController::class, "dati"])->name("dati_dispositivo");
+    Route::get("/dispositivo/statodisp", [DettagliController::class, "statoDisp"])->name("dati_statodisp");
+    Route::get("/dispositivo/rawdata", [DettagliController::class, "rawData"])->name("dati_rawdata");
 
     // soglie
     Route::get("/soglie", [SoglieController::class, 'view'])->name('soglie');
@@ -183,4 +190,4 @@ Route::middleware(['utente'])->group(function () {
     // Istruzioni per i fogli excel
     Route::get("/istruzioni", [IstruzioniController::class, "view"])->name('base_istruzioni');  // istruzione per il caricamento dei dispositivi
     Route::get("/istruzioni/{rotta}", [IstruzioniController::class, "getIstruzioni"])->name('istruzioni');  // istruzione per il caricamento dei dispositivi
-});
+// });

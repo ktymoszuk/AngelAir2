@@ -30,7 +30,7 @@
                 </div>
                 <div class="col-12 col-md-7 col-lg-6 col-xl-8 text-center text-md-end mt-1 mt-md-0">
                     <button class="btn btn-primary px-5 text-uppercase" @click="dispositiviPaginati(1)">
-                        <div v-if="!aggiornamento">
+                        <div v-if="!caricamento">
                             Cerca
                         </div>
                         <div v-else>
@@ -65,7 +65,7 @@
                             </span>
                             <button type="button"  class="btn-close fs-6" @click="chiudiAlert"></button>
                         </div>
-                        <div v-if="dispositiviInAllerta.length >= 0" class="text-start text-uppercase py-2 px-4 colore-card-2">
+                        <div v-if="dispositiviInAllerta.length > 0" class="text-start text-uppercase py-2 px-4 colore-card-2">
                             <span>
                                 {{ dispositiviInAllerta.length }} dispositivi in allerta
                             </span>
@@ -218,9 +218,16 @@ export default {
                 // this.categorieDispositivi = await getRequest(this.routeDatiTipodisp, null, null, null);
     
                 this.dispositiviPaginati();
+
+                this.tieniAggiornato();
             } catch (e) {
                 console.log(e);
             }
+        },
+        tieniAggiornato() {
+            setInterval(() => {
+                this.dispositiviPaginati(); // Chiamare la funzione asincrona con il contesto corrente
+            }, 10000);
         },
         async dispositiviPaginati(page = 1) {
             try {
