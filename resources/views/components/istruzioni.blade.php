@@ -22,7 +22,7 @@
                                         @if ($colonna['Nome'] == 'Categoria')
                                             <ul class="fw-bold"> Ecco la lista delle categorie disponibili:</ul>
                                             @foreach ($categorieDisp as $categoria)
-                                                <li style="list-style-type: circle;">{{ $categoria->Nome }}</li>
+                                                <li style="list-style-type: circle2;">{{ $categoria->Nome }}</li>
                                             @endforeach
                                         @endif
                                     </div>

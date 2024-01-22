@@ -53,6 +53,7 @@ Route::middleware(['utente'])->group(function () {
 
     // dashboard
     Route::get("/dashboard", [DashboardController::class, "index"])->name("dashboard"); // dashboard
+    Route::get("/dashboard/datimappa", [DashboardController::class, "datiMappa"])->name("dati_mappa"); // dashboard
 
     // monitoraggio
     Route::get("/monitoraggio", [MonitoraggioController::class, 'view'])->name('monitoraggio');

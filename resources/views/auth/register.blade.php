@@ -8,8 +8,8 @@
     <div class="register-card container">
         <div class="row pt-4">
             <div class="box-container col-12 m-auto">
-                <div class="circle"></div>
-                <div class="circle"></div>
+                <div class="circle2"></div>
+                <div class="circle2"></div>
                 <div class="box">
                     <p class="text-end text-light text-uppercase fw-light me-2" style="letter-spacing: 0.5rem;">Angel Air</p>
                     <span class="title text-center text-uppercase fw-light mb-3">

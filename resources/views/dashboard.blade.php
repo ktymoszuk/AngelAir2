@@ -6,6 +6,8 @@
     @include("components.alert")
 </div>
 
-<dashboard></dashboard>
+<dashboard
+    route-dati-mappa="{{ route('dati_mappa') }}"
+></dashboard>
 
 @endsection

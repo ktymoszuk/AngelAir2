@@ -48,7 +48,6 @@
                 </div>
             </nav>
 
-
             <!-- Modal scelta modalità di aggiunta -->
             <scelta-modalita-aggiunta :modal-id="idModalScelta" :modal-id-nuovo="idModalNuovo" :modal-id-csv="idModalCsv"></scelta-modalita-aggiunta>
 

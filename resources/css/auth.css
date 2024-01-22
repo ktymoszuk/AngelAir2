@@ -367,7 +367,7 @@
 /* Fine pulsante registrazione */
 
 /* Pallini volanti */
-.circle {
+.circle2 {
     width: 100px;
     height: 100px;
     background: radial-gradient(#fd3c2e, var(--axatel-app));
@@ -376,16 +376,16 @@
     animation: move-up6 20s ease-in infinite alternate-reverse;
 }
 
-.circle-blu {
+.circle2-blu {
     background: radial-gradient(#0d60a3, var(--axatel-primary));
 }
 
-.circle:nth-child(1) {
+.circle2:nth-child(1) {
     top: -25px;
     left: -25px;
 }
 
-.circle:nth-child(2) {
+.circle2:nth-child(2) {
     bottom: -25px;
     right: -25px;
     animation-name: move-down1;

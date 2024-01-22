@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Carbon\Carbon;
-use Illuminate\Pagination\Paginator;
 // MODELS
 use App\Models\Automazione;
 use App\Models\Struttura;

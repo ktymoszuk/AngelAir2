@@ -5,8 +5,8 @@
     <div class="register-card container">
         <div class="row pt-5">
             <div class="box-container col-12 m-auto">
-                <div class="circle circle-blu"></div>
-                <div class="circle circle-blu"></div>
+                <div class="circle2 circle-blu"></div>
+                <div class="circle2 circle-blu"></div>
                 <div class="box text-center pb-5">
                     <div class="text-center text-light text-uppercase fw-light mt-5 mb-4 me-2" style="letter-spacing: 0.5rem;">
                         <img src="{{ asset('immagini/logo_angeltracking.png') }}" class="img-fluid mx-auto intro ms-3 ms-lg-5" style="width: 20%">

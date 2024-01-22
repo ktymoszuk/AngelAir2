@@ -6,6 +6,8 @@
 @import "./loader.css";
 @import "./my-bootstrap.css";
 @import "./cerchi-stato.css";
+@import "leaflet/dist/leaflet.css";
+
 
 .fullscreen-icon {
     background-image: url(icon-fullscreen.svg);
