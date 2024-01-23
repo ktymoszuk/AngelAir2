@@ -12,6 +12,7 @@
     route-dati-strutture="{{ route('dati_strutture') }}"
     route-dati-dispositivi="{{ route('dati_dispositivi') }}"
     route-dati-tipodisp="{{ route('dati_tipodisp') }}"
+    route-dati-valori-disponibili="{{ route('dati_valori_disponibili') }}"
 ></grafici>
 
 @endsection

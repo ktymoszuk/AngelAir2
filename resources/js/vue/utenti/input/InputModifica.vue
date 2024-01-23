@@ -12,20 +12,18 @@
         </div>
         <div class="input-group mt-3 m-auto">
             <span class="btn border border-end-0 bg-light" style="cursor: auto">Email</span>
-            <input type="text" class="form-control" name="Email" placeholder="Email"
+            <input type="text" class="form-control" name="email" placeholder="Email"
                 :value="utente.email" />
         </div>
         <div  class="input-group mt-3 m-auto">
             <span class="btn border border-end-0 bg-light cursor">Password</span>
-            <input type="text" class="form-control" name="Password" placeholder="nuova dell'utente" />
+            <input type="text" class="form-control" name="password" placeholder="nuova dell'utente" />
         </div>
         <div  class="input-group mt-3 m-auto">
             <span class="btn border border-end-0 bg-light cursor">Ruolo</span>
             <select name="Ruolo" class="form-select" :value="utente.Ruolo">
-                <option value="0">Amministratore</option>
-                <option value="1">Operatore</option>
-                <option value="2">Manutentore</option>
-                <option value="3">Ospite</option>
+                <option value="0">Operatore</option>
+                <option value="1">Amministratore</option>
             </select>
         </div>
         <div class="mt-4 m-auto">

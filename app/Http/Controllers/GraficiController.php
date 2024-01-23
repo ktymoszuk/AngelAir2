@@ -24,6 +24,27 @@ class GraficiController extends Controller
         return view("grafici");
     }
 
+    public function valoriDisponibili(Request $request) {
+        $codTipoDisp = Dispositivo::where('DevEui', $request->deveui)->first()->codTipoDisp;
+        $tipo = TipoDispositivo::where('IdTipo', $codTipoDisp)->first();
+
+        $chiavi = array_keys($tipo->toArray());
+        $keys = [];
+        $chiaviNonNecessarie = ['IdTipo', 'Logo', 'Nome', 'Note', 'ParserName', 'PinMappa', ];
+
+        $valori = [];
+        foreach ($chiavi as $k => $chiave) {
+            if (!in_array($chiave, $chiaviNonNecessarie)) {
+                array_push($keys, $chiavi[$k]);
+                if (!is_null($tipo[$chiave])) {
+                    $valori[$tipo[$chiave]] = $chiave;
+                }
+            }
+        }
+
+        return response()->json($valori);
+    }
+
     // SELECT
     // visualizzazione dati per grafico
     public function show(Request $request) {

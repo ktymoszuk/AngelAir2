@@ -70,13 +70,10 @@
                     </div>
                 </div>
             </div>
-            <div @click="giraFreccia(chiave)" class="col-12 colore-card-0 cursor-pointer py-2 text-center" :class="{ 'elemento-card-4': dispositivo.StatoComunicazioni == 2, 'elemento-card-2': dispositivo.StatoComunicazioni == 1, 'elemento-card-1': dispositivo.StatoComunicazioni == 0 }" data-bs-toggle="collapse" :data-bs-target="'#d-' + chiave" aria-expanded="true" >
+            <div @click="giraFreccia(chiave)" class="col-12 elemento-card-0 cursor-pointer py-2 text-center" :class="{ 'colore-card-4': dispositivo.StatoComunicazioni == 2, 'colore-card-2': dispositivo.StatoComunicazioni == 1, 'colore-card-1': dispositivo.StatoComunicazioni == 0 }" data-bs-toggle="collapse" :data-bs-target="'#d-' + chiave" aria-expanded="true" >
                 <span class="material-icons icon-centered center apri-chiudi" :id="'freccia' + chiave">
                     expand_more
                 </span>
-                <!-- <span class="material-icons icon-centered center">
-                    expand_less
-                </span> -->
             </div>
         </form>
         

@@ -3,19 +3,24 @@
 
         <!-- Titolo -->
         <titolo titolo="Grafici" sottotitolo="dei dati" :bottoni="bottoni"></titolo>
-        
         <!-- Filtri -->
         <nav class="row">
 
             <div class="col-12 col-sm-6 col-md-4 d-flex justify-content-end align-items-start mt-3 mt-md-0">
                 <div class="input-group">
                     <span class="btn border border-end-0 bg-light d-flex" style="cursor: auto">
-                        Struttura<asterisco/>
+                        Struttura
                     </span>
-                    <select id="selectStruttura" class="form-select" v-model="codStruttura"
-                        @change="getDispositivi()">
+                    <select id="selectStruttura" class="form-select" v-model="codStruttura" @change="dispositiviValidiPerSelect">
                         <option disabled selected value="">Seleziona</option>
-                        <option :value="0">Tutte</option>
+                        <option :value="0">
+                            <span v-if="selectStrutture != null">
+                                Tutte
+                            </span>
+                            <span v-else>
+                                Caricamento...
+                            </span>
+                        </option>
                         <option v-for="struttura in selectStrutture" :value="struttura.id" :label="struttura.Nome"></option>
                     </select>
                 </div>
@@ -23,13 +28,22 @@
             <div class="col-12 col-sm-6 col-md-4 d-flex justify-content-end align-items-start mt-3 mt-md-0">
                 <div class="input-group">
                     <span class="btn border border-end-0 bg-light d-flex" style="cursor: auto">
-                        Categoria<asterisco/>
+                        Categoria
                     </span>
-                    <select id="selectCategoriaDisp" class="form-select" v-model="codCategoriaDisp" :disabled="codStruttura === null"
-                    @change="getDispositivi()">
-                        <option selected :value="0">Tutte</option>
-                        <option v-for="categoria in selectCategorieDispositivi" :value="categoria.id" :label="categoria.Nome">
+                    <select id="selectCategoriaDisp" class="form-select" v-model="codCategoriaDisp" :disabled="codStruttura === null || !selectCategorieDispositivi" @change="dispositiviValidiPerSelect">
+                        <option selected :value="0">
+                            <span v-if="selectCategorieDispositivi != null">
+                                Tutte
+                            </span>
+                            <span v-else>
+                                Caricamento...
+                            </span>
                         </option>
+                        <template v-for="categoria in selectCategorieDispositivi">
+                            <option :value="categoria.IdTipo">
+                                {{ categoria.Nome }}
+                            </option>
+                        </template>
                     </select>
                 </div>
             </div>
@@ -38,12 +52,29 @@
                     <span class="btn border border-end-0 bg-light d-flex" style="cursor: auto">
                         Dispositivo<asterisco/>
                     </span>
-                    <select id="selectDispositivo" class="form-select" :disabled="codStruttura === null"
+                    <select id="selectDispositivo" class="form-select" :disabled="codStruttura === null || !dispositiviFiltrati"
                             v-model="dispositivo" @change="getValori()">
-                            <option disabled value="">Seleziona</option>
-                            <option v-for="option in dispositivi" :value="option.Deveui" :id="option.id" :nome="option.Nome"
-                                :appTag="option.AppTag" :label="option.Nome">
+                            <option disabled value="">
+                                <span v-if="dispositiviFiltrati != null">
+                                    Seleziona
+                                </span>
+                                <span v-else>
+                                    Caricamento...
+                                </span>
                             </option>
+                            <template v-for="option in dispositiviFiltrati">
+                                <!-- <option v-if="
+                                    (option.codTipoDisp == codCategoriaDisp && option.codStruttura == codStruttura) ||
+                                    (codStruttura != 0 && option.codStruttura == codStruttura && )
+                                    "
+                                    :value="option.Deveui" :id="option.id" :nome="option.Nome"
+                                    :appTag="option.AppTag" :label="option.Nome">
+                                </option> -->
+                                <option
+                                    :value="option.DevEui" :id="option.id" :nome="option.Nome"
+                                    :appTag="option.AppTag" :label="option.Nome">
+                                </option>
+                            </template>
                     </select>
                 </div>
             </div>
@@ -76,15 +107,7 @@
                 </div>
             </div>
             <div class="col-12 col-sm-6 col-md-4 d-flex justify-content-end align-items-start mt-3">
-                <div v-if="dispositivo == ''" class="input-group">
-                    <span class="btn border border-end-0 bg-light d-flex" style="cursor: auto">
-                        Range date
-                    </span>
-                    <select id="selectDispositivo" class="form-select" disabled>
-                        <option value="">Seleziona</option>
-                    </select>
-                </div>
-                <div v-else class="input-group w-100 border rounded">
+                <div class="input-group w-100 border rounded">
                     <span class="btn border-0 bg-light d-flex w-25" style="cursor: auto">
                         Valori<asterisco/>
                     </span>
@@ -93,7 +116,7 @@
                             Seleziona
                         </button>
                         <ul class="dropdown-menu py-0 w-100 border-top-0 rounded-top-0 overflow-hidden" aria-labelledby="dropdownMenuButton1">
-                            <li v-for="(item, key) in valoriDisp" class="dropdown-item px-3 py-2 d-flex" @click="toggleCheckbox(item, $event)">
+                            <li v-for="(item, key) in valoriDisponibili" class="dropdown-item px-3 py-2 d-flex" @click="toggleCheckbox(item, $event)">
                                 <div class="checkbox-wrapper">
                                     <input :id="'checkbox-' + key" type="checkbox" :value="item" v-model="lista">
                                     <label :for="'checkbox-' + key" class="ms-0 me-3" @click.stop>
@@ -106,6 +129,24 @@
                     </div>
                 </div>
             </div>
+            <div class="col-12 col-sm-6 col-md-4 d-flex justify-content-end align-items-start mt-3">
+                <div class="input-group w-100">
+                    <span class="btn border border-end-0 bg-light d-flex w-25" style="cursor: auto">
+                        Valori
+                    </span>
+                    <!-- 
+                    // 'dbid': l'id dell'elemento che andrà nel value nel db
+                    // 'options': dati per le options
+                    // 'optionLabel': variabile che prelevo dalle options per creare il label del checkbox
+                    // 'nameSelect': nome da inserire del campo select
+                    // 'nameCheckbox': il 'name' che mi serve per il db
+                    // 'giaSelezionati': index degli elementi già selezionati
+                    -->
+
+                    <multiselect></multiselect>
+                </div>
+            </div>
+
             <div class="col-12 col-sm-6 col-md-4 mt-3">
                 <span v-for="badge in lista" class="badge bg-blu-axatel fw-normal text-uppercase py-1 me-2">{{ badge }}</span>
             </div>
@@ -219,11 +260,13 @@ import { jsPDF } from "jspdf";
 import Titolo from '../componenti/Titolo.vue';
 import Loader from '../componenti/Loader.vue';
 import Asterisco from '../componenti/Asterisco.vue';
+import Multiselect from '../componenti/Multiselect.vue';
 
 export default {
 components: {
     Titolo,
     Asterisco,
+    Multiselect,
     Loader,
 },
 data() {
@@ -232,6 +275,8 @@ data() {
         caricamento: false,
         rangeDate: [],
         msgErrore: "",
+        categoria: '',
+        dispositiviFiltrati: null,
 
         colonneValoriList: [],
         colonneList: [],
@@ -240,12 +285,12 @@ data() {
         dataDA: "",
         codRange: "",
         strutture: [],
-        codStruttura: null,
+        codStruttura: 0,
         categorieDispositivi: [],
         codCategoriaDisp: 0,
         dispositivi: null,
         dispositivo: "",
-        valoriDisp: [],
+        valoriDisponibili: null,
         valore: "",
         isFullScreen: false,
 
@@ -285,10 +330,23 @@ props: {
     'routeStatistiche': {
         required: true,
     },
+    'routeDatiStrutture': {
+        required: true,
+    },
+    'routeDatiDispositivi': {
+        required: true,
+    },
+    'routeDatiTipodisp': {
+        required: true,
+    },
+    'routeDatiValoriDisponibili': {
+        required: true,
+    },
 },
 mounted() {
     this.setup();
     // this.getDatiPrincipali();
+
     this.rangeDate = {
         '1 Ora': [1, 'hours'],
         '12 Ore': [12, 'hours'],
@@ -312,28 +370,39 @@ methods: {
             this.selectStrutture = await getRequest(this.routeDatiStrutture, null, null, null);
             this.selectCategorieDispositivi = await getRequest(this.routeDatiTipodisp, null, null, null);
             this.selectDispositivi = await getRequest(this.routeDatiDispositivi, null, null, null);
+            this.dispositiviValidiPerSelect();
 
             this.caricamento = false;
         } catch (e) {
                 console.log(e);
         }
     },
-    //Otteniamo i dati per i dispositivi e per il form
-    async getDatiPrincipali() {  //Dati principali per i filtri dati
-        try {
-            let res = await getRequest("/grafici/dati", null, null);
-
-            this.strutture = res.strutture;  //importiamo le strutture
-
-            this.categorieDispositivi = res.categorieDispositivi;  //importiamo le categorie dispositivi
-
-            this.caricamento = false;
-
-        }
-        catch (e) {
-            console.log(e);
-        }
+    dispositiviValidiPerSelect() {
+        const struttura = this.codStruttura;
+        const tipoDisp = this.codCategoriaDisp;
+        const dispositivi = this.selectDispositivi.slice();
+        const filtro = dispositivi.filter(dispositivo =>
+            (dispositivo.codStruttura == struttura || struttura === 0) &&
+            (dispositivo.codTipoDisp === tipoDisp || tipoDisp === 0)
+        );
+        this.dispositiviFiltrati = filtro;
     },
+    //Otteniamo i dati per i dispositivi e per il form
+    // async getDatiPrincipali() {  //Dati principali per i filtri dati
+    //     try {
+    //         let res = await getRequest("/grafici/dati", null, null);
+
+    //         this.strutture = res.strutture;  //importiamo le strutture
+
+    //         this.categorieDispositivi = res.categorieDispositivi;  //importiamo le categorie dispositivi
+
+    //         this.caricamento = false;
+
+    //     }
+    //     catch (e) {
+    //         console.log(e);
+    //     }
+    // },
     toggleCheckbox(item, event) {
         try {
             // Impedisco la propagazione dell'evento di clic
@@ -356,38 +425,25 @@ methods: {
             console.log(e);
         }
     },
-    // Otteniamo i dispositivi disponibili
-    async getDispositivi() {
-        try {
-            if (this.codCategoriaDisp != null && this.codStruttura != null) {
-                let res = await getRequest("/grafici/dati/dispositivi", {
-                    'idStruttura': this.codStruttura,
-                    'idCatDisp': this.codCategoriaDisp,
-                }, null);
-
-                this.dispositivi = res;
-            }
-        }
-        catch (e) {
-            console.log(e);
-        }
-    },
     // composizione selezione valori
     async getValori() {
         try {
-            const appTag = $("#selectDispositivo").find("option:selected").attr("appTag");
+            // const appTag = $("#selectDispositivo").find("option:selected").attr("appTag");
+            const select = document.getElementById('selectDispositivo');
+            const deveui = select.value;
 
-            let res = await getRequest("/grafici/dati/valoridisponibili", {
-                'appTag': appTag,
+            this.valoriDisponibili = await getRequest(this.routeDatiValoriDisponibili, {
+                'deveui': deveui,
             }, null);
+            console.log(this.valoriDisponibili);
 
-            this.valoriDisp = res.valoriDisp;
+            // this.valoriDisp = res.valoriDisp;
 
-            this.colonneList = res.colonne;
+            // this.colonneList = res.colonne;
 
-            if (!this.lista.includes("Temperatura")) {
-                this.lista.push("Temperatura");
-            }
+            // if (!this.lista.includes("Temperatura")) {
+            //     this.lista.push("Temperatura");
+            // }
         }
         catch (e) {
             console.log(e);

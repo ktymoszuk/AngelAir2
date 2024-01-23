@@ -26,16 +26,16 @@ class UtentiController extends Controller
             $query = LogicManager::generazioneQuery($request->all());
 
             // se password nuova non inserita, tolgo campo password
-            if ($query["Password"] == null) {
-                unset($query["Password"]);
+            if ($query["password"] == null) {
+                unset($query["password"]);
             } else {
-                $query["Password"] = Hash::make($query["Password"]);
+                $query["password"] = Hash::make($query["password"]);
             }
 
             // imposto stato valore checkbox
             $query["isAbilitato"] = LogicManager::getCheckboxState($request, "isAbilitato");
 
-            $query['Email'] = Crypt::encryptString($query['Email']);
+            $query['email'] = Crypt::encryptString($query['email']);
 
             $res = User::where("id", $request->id)->update($query);
             if ($res) {
@@ -50,14 +50,14 @@ class UtentiController extends Controller
                 // Session::flash("error", "Errore nell'aggiornamento dell'utente");
             }
 
-            return redirect()->route("utenti");
+            return back();
         } catch (\Throwable $th) {
             return $th;
             LogManager::scritturaLogs("utenze", NULL, false, $request->ip(), Auth::id(), "Utente", $request, $th);
             Session::flash("error", LogManager::messaggiOperazioni(NULL, false, "Utente"));
             // Log::channel("utenze")->error($request->ip() . " -> " . Auth::id() . ": Errore processo aggiornamento utente $request->id -> $th");
             // Session::flash("error", "Errore processo aggiornamento utente");
-            return redirect()->route("utenti");
+            return back();
         }
     }
 
@@ -87,11 +87,11 @@ class UtentiController extends Controller
                 Session::flash("success", LogManager::messaggiOperazioni(2, true, "Utente"));
             }
 
-            return redirect()->route("utenti");
+            return back();
         } catch (\Throwable $th) {
             LogManager::scritturaLogs("utenze", NULL, false, $request->ip(), Auth::id(), "Utente", $request, $th);
             Session::flash("error", LogManager::messaggiOperazioni(NULL, false, "Utente"));
-            return redirect()->route("utenti");
+            return back();
         }
     }
 }

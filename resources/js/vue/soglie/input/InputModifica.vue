@@ -2,7 +2,7 @@
     <div class="position-relative">
 
         <!-- IMPOSTAZIONI GENERALI -->
-        <div v-if="caricamentox" class="position-absolute" style="top:0;left:50%; margin-top: -50px; transform: translateX(-50%);">
+        <div v-if="caricamento" class="position-absolute" style="top:0;left:50%; margin-top: -50px; transform: translateX(-50%);">
             <div class="spinner-grow spinner-grow-sm mx-1" role="status">
                 <span class="visually-hidden">Loading...</span>
             </div>
@@ -44,7 +44,9 @@
                 </span>
                 <select :id="'selectTipoDispositivoSoglia' + chiave" name="codTipoDisp" :value="soglia.codTipoDisp" class="form-select" @change="cambia">
                     <option selected disabled value="">Seleziona</option>
-                    <option v-for="option in categorieDispositivi" :value="option.IdTipo" :label="option.Nome" @mousedown="codTipoDisp = option.id"></option>
+                    <template v-if="categorieDispositivi">
+                        <option v-for="option in categorieDispositivi" :value="option.IdTipo" :label="option.Nome" @mousedown="codTipoDisp = option.id"></option>
+                    </template>
                 </select>
             </div>
         </div>
@@ -307,12 +309,14 @@ export default {
         },
         async getOptionsColonnaAssociata() {
             this.optionsColonnaAssociata = [];
-            const res = this.categorieDispositivi.filter(tipo => tipo);
-            if (this.codAutomazione && this.codTipoDisp) {
-                this.optionsColonnaAssociata = await getRequest(this.routeDatiColonneAssociate, {
-                    "categoriadisp": this.codTipoDisp,
-                    "automazione": this.codAutomazione,
-                }, null);
+            if (this.categorieDispositivi) {
+                const res = this.categorieDispositivi.filter(tipo => tipo);
+                if (this.codAutomazione && this.codTipoDisp) {
+                    this.optionsColonnaAssociata = await getRequest(this.routeDatiColonneAssociate, {
+                        "categoriadisp": this.codTipoDisp,
+                        "automazione": this.codAutomazione,
+                    }, null);
+                }
             }
 
             this.caricamento = false;

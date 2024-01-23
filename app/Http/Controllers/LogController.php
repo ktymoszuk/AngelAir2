@@ -21,8 +21,8 @@ class LogController extends Controller
             DB::insert('insert into Logs (AxAppTag, AxSystemTag, Codice, codUtente, Messaggio, DataOra) values ( ?, ?, ?, ?, ?, ?)', ["VS_AT", "VS_AT_Belluno"  ,$codice, $idUtente, $messaggio, now()]);
             Artisan::call('ax:generate', ["tabella" => "Logs"]);
             return 1;
-        }catch(\Throwable $th){
-            LogManager::scritturaLogs("operazini", 1, false, null, Auth::id(), "Log", $request, $th);
+        }catch(\Throwable $th){                                                    // $request
+            LogManager::scritturaLogs("operazini", 1, false, null, Auth::id(), "Log", null, $th);
             return 0;
         }
     }

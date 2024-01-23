@@ -101,8 +101,8 @@ class SoglieController extends Controller
 
             return back();
         } catch (\Throwable $th) {
-            LogManager::scritturaLogs("operazioni", NULL, false, $request->ip(), Auth::id(), "Soglia", $request, $th);
-            Session::flash("error", LogManager::messaggiOperazioni(NULL, false, "Soglia"));
+            LogManager::scritturaLogs("operazioni", null, false, $request->ip(), Auth::id(), "Soglia", $request, $th);
+            Session::flash("error", LogManager::messaggiOperazioni(null, false, "Soglia"));
             return back();
         }
     }
@@ -141,7 +141,7 @@ class SoglieController extends Controller
     public function update(SogliaRequest $request) {
         try {
             $operatori = ['==', '<', '<=', '>', '>=', '!='];
-
+            
             $query = LogicManager::generazioneQuery($request->all());
             $operatoreMinimo = $request->OperatoreMinimo;
             if (in_array($operatoreMinimo, $operatori)) {
@@ -161,11 +161,11 @@ class SoglieController extends Controller
             }
 
             if ($query['ValoreMinimo']) {
-                if ($query['TipoDatoSoglia'] == 'Testuale') {
-                    strval($query['ValoreMinimo']);
-                } else if ($query['TipoDatoSoglia'] == 'Numerica') {
-                    floatval($query['ValoreMinimo']);
-                }
+                // if ($query['TipoDatoSoglia'] == 'Testuale') {
+                //     $query['ValoreMinimo'] = strval($query['ValoreMinimo']);
+                // } else if ($query['TipoDatoSoglia'] == 'Numerica') {
+                //     $query['ValoreMinimo'] = floatval($query['ValoreMinimo']);
+                // }
             } else {
                 LogManager::scritturaLogs("operazioni", 1, false, $request->ip(), Auth::id(), "Soglia senza valore", $request, NULL);
                 Session::flash("error", LogManager::messaggiOperazioni(1, false, "Soglia senza valore"));
@@ -178,34 +178,40 @@ class SoglieController extends Controller
                 $query["AliasMassimo"] = 'Valore Massimo';
                 $query["ColoreMassimo"] = '#ff1803';
             } else {
-                if ($query['ValoreMassimo']) {
-                    if ($query['TipoDatoSoglia'] == 'Testuale') {
-                        strval($query['ValoreMassimo']);
-                    } else if ($query['TipoDatoSoglia'] == 'Numerica') {
-                        floatval($query['ValoreMassimo']);
-                    }
+                if (isset($query['ValoreMassimo'])) {
+                    // if ($query['TipoDatoSoglia'] == 'Testuale') {
+                    //     $query['ValoreMinimo'] = strval($query['ValoreMassimo']);
+                    // } else if ($query['TipoDatoSoglia'] == 'Numerica') {
+                    //     $query['ValoreMassimo'] = floatval($query['ValoreMassimo']);
+                    // }
                 } else {
                     LogManager::scritturaLogs("operazioni", 1, false, $request->ip(), Auth::id(), "Soglia senza valore", $request, NULL);
                     Session::flash("error", LogManager::messaggiOperazioni(1, false, "Soglia senza valore"));
                     return back();
                 }
             }
-
+            
             $query['codAutomazione'] = (int)$query['codAutomazione'];
             $query['codTipoDisp'] = (int)$query['codTipoDisp'];
             $query['codCategoriaSoglia'] = (int)$query['codCategoriaSoglia'];
-
+            
+            // dd($query);
+            // dd('ciao');
+            // $soglia = Soglia::where("id", $request->id)->first();
+            
+            
             $res = Soglia::where("id", $request->id)->update($query);
-
+            
             if ($res) {
                 LogManager::scritturaLogs("operazioni", 1, true, $request->ip(), Auth::id(), "Soglia", $request, NULL);
                 Session::flash("success", LogManager::messaggiOperazioni(1, true, "Soglia"));
+                return back();
             } else {
                 LogManager::scritturaLogs("operazioni", 1, false, $request->ip(), Auth::id(), "Soglia", $request, NULL);
                 Session::flash("error", LogManager::messaggiOperazioni(1, false, "Soglia"));
+                return back();
             }
 
-            return back();
         } catch (\Throwable $th) {
             LogManager::scritturaLogs("operazioni", 1, false, $request->ip(), Auth::id(), "Soglia", $request, $th);
             Session::flash("error", LogManager::messaggiOperazioni(1, false, "Soglia"));
@@ -223,27 +229,32 @@ class SoglieController extends Controller
                 if ($res) {
                     LogManager::scritturaLogs("operazioni", 2, true, $request->ip(), Auth::id(), "Soglia", $request, NULL);
                     Session::flash("success", LogManager::messaggiOperazioni(2, true, "Soglia"));    
+                    return back();
+
                 } else {
                     LogManager::scritturaLogs("operazioni", 2, false, $request->ip(), Auth::id(), "Soglia", $request, NULL);
-                    Session::flash("error", LogManager::messaggiOperazioni(2, false, "Soglia"));    
+                    Session::flash("error", LogManager::messaggiOperazioni(2, false, "Soglia"));
+                    return back();
                 }
             }
 
             $res = Soglia::where("id", $request->id)->delete();
             if ($res) {
-                $res2 = Notifica::where("codSoglia", $id)->delete();
-                if ($res2) {
-                    LogManager::scritturaLogs("operazioni", 2, true, $request->ip(), Auth::id(), "Notifica soglia", $request, NULL);
-                    Session::flash("success", LogManager::messaggiOperazioni(2, true, "Notifica soglia"));    
-                }
+                // $res2 = Notifica::where("codSoglia", $id)->delete();
+                // if ($res2) {
+                //     LogManager::scritturaLogs("operazioni", 2, true, $request->ip(), Auth::id(), "Notifica soglia", $request, NULL);
+                //     Session::flash("success", LogManager::messaggiOperazioni(2, true, "Notifica soglia"));    
+                // }
                 LogManager::scritturaLogs("operazioni", 2, true, $request->ip(), Auth::id(), "Soglia", $request, NULL);
                 Session::flash("success", LogManager::messaggiOperazioni(2, true, "Soglia"));
+                return back();
+
             } else {
                 LogManager::scritturaLogs("operazioni", 2, false, $request->ip(), Auth::id(), "Soglia", $request, NULL);
                 Session::flash("error", LogManager::messaggiOperazioni(2, false, "Soglia"));
+                return back();
             }
 
-            return back();
         } catch (\Throwable $th) {
             LogManager::scritturaLogs("operazioni", NULL, false, $request->ip(), Auth::id(), "Soglia", $request, $th);
             Session::flash("error", LogManager::messaggiOperazioni(NULL, false, "Soglia"));

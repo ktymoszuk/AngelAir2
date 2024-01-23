@@ -4,12 +4,25 @@ namespace App\Manager;
 use App\Http\Controllers\LogController;
 use Illuminate\Support\Facades\Log;
 
+
 class LogManager {
     // canale = utenze o operazioni, operazione = 0, 1, 2 ecc..., stato = true o  false, ip = indirizzo ip utente
     // id = id utente, obj = Struttura, Utente, Automazione, Dipositivo ecc..., objID = id Struttura, Utente, Dispositivo ecc..
     // th = errore processo
     public static function scritturaLogs($canale, $operazione, $stato, $ip, $id, $obj, $request, $th) {
         $message = "";
+        $codDispositivo = '';
+        if (isset($request['codDispositivo']) && !empty($request['codDispositivo'])) {
+            $codDispositivo = $request['codDispositivo'];
+        }
+        $idOggetto = null;
+        if (isset($request['id'])) {
+            $idOggetto = $request['id'];
+        } else if (isset($request['Nome']) && !empty($request['Nome'])) {
+            $idOggetto = $request['Nome'];
+        } else {
+            $idOggetto = null;
+        }
         switch ($operazione) {
             // insert
             case 0:
@@ -20,14 +33,14 @@ class LogManager {
 
             // update
             case 1:
-                $message = ($stato) ? $ip . " -> " . $id . ": $obj $request->id : aggiornato con successo" : $ip . " -> " . $id . ": Errore aggiornamento $obj $request->id";
+                $message = ($stato) ? $ip . " -> " . $id . ": $obj $idOggetto : aggiornato con successo" : $ip . " -> " . $id . ": Errore aggiornamento $obj $idOggetto";
                 ($stato) ? Log::channel($canale)->info($message) : Log::channel($canale)->error($message);
                 LogController::scritturaLog(($stato) ? "SUCCESS" : "ERROR", $message . "(update)", $id);
                 break;
 
             // delete
             case 2:
-                $message = ($stato) ? $ip . " -> " . $id . ": $obj $request->id : cancellato con successo" : $ip . " -> " . $id . ": Errore cancellazione $obj $request->id";
+                $message = ($stato) ? $ip . " -> " . $id . ": $obj $idOggetto : cancellato con successo" : $ip . " -> " . $id . ": Errore cancellazione $obj $idOggetto";
                 ($stato) ? Log::channel($canale)->info($message) : Log::channel($canale)->error($message);
                 LogController::scritturaLog(($stato) ? "SUCCESS" : "ERROR", $message . "(delete)", $id);
                 break;
@@ -41,14 +54,14 @@ class LogManager {
 
             // associazione
             case 4:
-                $message = ($stato) ? $ip . " -> " . $id . ": Associazione $obj eseguita con dispositivo $request->codDispositivo con successo" : $ip . " -> " . $id . ": Errore nell'associazione $obj con dispositivo $request->codDispositivo";
+                $message = ($stato) ? $ip . " -> " . $id . ": Associazione $obj eseguita con dispositivo $codDispositivo con successo" : $ip . " -> " . $id . ": Errore nell'associazione $obj con dispositivo $codDispositivo";
                 ($stato) ? Log::channel($canale)->info($message) : Log::channel($canale)->error($message);
                 LogController::scritturaLog(($stato) ? "SUCCESS" : "ERROR", $message . "(associazione)", $id);
                 break;
 
             // associazione
             case 5:
-                $message = ($stato) ? $ip . " -> " . $id . ": Associazione $obj con dispositivo $request->codDispositivo eliminata con successo" : $ip . " -> " . $id . ": Errore nell'eliminazione associazione di $obj con dispositivo $request->codDispositivo";
+                $message = ($stato) ? $ip . " -> " . $id . ": Associazione $obj con dispositivo $codDispositivo eliminata con successo" : $ip . " -> " . $id . ": Errore nell'eliminazione associazione di $obj con dispositivo $codDispositivo";
                 ($stato) ? Log::channel($canale)->info($message) : Log::channel($canale)->error($message);
                 LogController::scritturaLog(($stato) ? "SUCCESS" : "ERROR", $message . "(associazione)", $id);
                 break;
@@ -62,7 +75,7 @@ class LogManager {
             
             // errore processo
             default:
-                $message = $ip . " -> " . $id . ": Errore processo $obj $request->id: $th";
+                $message = $ip . " -> " . $id . ": Errore processo $obj $idOggetto: $th";
                 Log::channel($canale)->info($message);
                 LogController::scritturaLog(($stato) ? "SUCCESS" : "ERROR", $message . "(ERRORE PROCESSO)", $id);
                 break;

@@ -96,6 +96,12 @@
     background-color: #ffeeea;
 }
 
+.elemento-card-gray {
+    transition: .4s;
+}
+.elemento-card-gray:hover {
+    background-color: #e2e2e2;
+} 
 .elemento-card-0:hover {
     background-color: #f4f4f4;
 } 

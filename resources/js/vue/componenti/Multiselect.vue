@@ -1,5 +1,5 @@
 <template>
-    <div class="position-relative" style="z-index: 9999;">
+    <div class="position-relative w-75" style="z-index: 9999;">
         <div class="input-group cursor-pointer" @click="mostraElementi = !mostraElementi">
             <span v-if="nameSelect" class="btn border border-end-0 bg-light" style="cursor: auto">{{ nameSelect }}</span>
             <div class="form-control d-flex justify-content-between align-items-center pe-2">

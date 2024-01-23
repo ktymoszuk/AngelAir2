@@ -193,9 +193,6 @@ export default {
                 console.log(e);
             }
         },
-        onMapClick() {
-
-        }
     }
 }
 </script>

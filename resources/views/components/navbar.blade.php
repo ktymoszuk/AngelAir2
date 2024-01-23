@@ -5,9 +5,9 @@
             <span class="d-inline-block ms-md-3 ms-lg-5">
                 <img src="{{ asset('immagini/logo_angeltracking.png') }}" style="height: 40px;" alt="Logo Angel Air">
             </span>
-            <span class="navbar-brand text-uppercase fw-5 fw-normal ms-1 text-primary">Angel Air</span>
+            <span class="navbar-brand text-uppercase fw-5 fw-normal ms-1 text-primary">Angel Air<span class="d-xxl-none fw-light" style="text-transform: capitalize;"> - {{ Route::currentRouteName() }}</span></span>
         </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        <button class="navbar-toggler border-0 elemento-card-gray" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -26,7 +26,7 @@
 
                     </a>
                     <ul class="dropdown-menu m-0 p-0">
-                        <li><a class="dropdown-item text-center text-xxl-start" href="{{ route('monitoraggio') }}">Monitoraggio</a></li>
+                        <li><a class="dropdown-item text-center text-xxl-start" href="{{ route('monitoraggio') }}">Archivio</a></li>
                         <li><a class="dropdown-item text-center text-xxl-start" href="{{ route('grafici') }}">Grafici</a></li>
                         <li><a class="dropdown-item text-center text-xxl-start" href="{{ route('statistiche') }}">Statistiche</a></li>
                         <li><a class="dropdown-item text-center text-xxl-start" href="{{ route('real_time') }}">Real time</a></li>
