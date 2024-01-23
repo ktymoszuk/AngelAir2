@@ -127,22 +127,32 @@ export default {
                 {
                     const dispositivi  = cluster.getAllChildMarkers();
                     const allarmi = [];
+                    const allerte = [];
                     dispositivi.forEach(dispositivo => {
-                        console.log(dispositivo.dispositivo);
-                        if (dispositivo.dispositivo.isAllarme) {
+                        // console.log(dispositivo.dispositivo);
+                        if (dispositivo.dispositivo.isAllarme == 1) {
+                            allerte.push(dispositivo.dispositivo.Citta);
+                        } else if (dispositivo.dispositivo.isAllarme == 2) {
                             allarmi.push(dispositivo.dispositivo.Citta);
                         };
                     });
+                    const setAllerte = new Set(allerte);
+                    const setAllarmi = new Set(allarmi);
+
+                    let markerColore = dispositivi[0].dispositivo.tipodispositivo.Logo.split('.')[0];
+                    if (setAllerte.size > 0) {
+                        markerColore += 'Allerta';
+                    }
+                    if (setAllarmi.size > 0) {
+                        markerColore += 'Allarme';
+                    }
+                    markerColore += '.' + dispositivi[0].dispositivo.tipodispositivo.Logo.split('.')[1];
                     const childCount = cluster.getChildCount();
+                    const span = childCount > 2 ? childCount : dispositivi[0].dispositivo.Citta;
+                
                     let icona;
-                    if (allarmi.length == 0) {
-                        icona = new L.DivIcon({ html: '<div class="circle" style="background-image: url(http://localhost:8000/immagini/marker/Cerere.png);"><span class="cluster-tooltip"><span class="mt-1 px-1">' + childCount + '</span></span></div>', 
-                        className: 'marker-cluster-normal', iconSize: new L.Point(40, 40) });
-                    } 
-                    else {
-                        icona = new L.DivIcon({ html: '<div class="circle" style="background-image: url(http://localhost:8000/immagini/marker/CerereAllarme.png);"><span class="cluster-tooltip outline-tooltip"><span class="mt-1 px-1 fw-bold">' + childCount + '</span></span></div>', 
-                        className: 'marker-cluster-normal', iconSize: new L.Point(40, 40) });
-                    } 
+                    icona = new L.DivIcon({ html: '<div class="position-relative" style="background-image: url(http://localhost:8000/immagini/marker/' + markerColore + ');"><span class="mt-1 px-1 cluster-tooltip">' + span + '</span></div>', 
+                    className: 'marker-cluster-normal', iconSize: new L.Point(40, 40) });
                     
                     return icona;
                 }
@@ -151,14 +161,23 @@ export default {
                 a.layer.spiderfy();
             });
             this.dispositivi.forEach(dispositivo => {
+                let logo = dispositivo.tipodispositivo.Logo.split('.')[0];
+                if (dispositivo.isAllarme == 1) {
+                    logo += 'Allerta';
+                }
+                if (dispositivo.isAllarme == 2) {
+                    logo += 'Allarme';
+                }
+                logo += '.' + dispositivo.tipodispositivo.Logo.split('.')[1];
+
                 const m = L.marker([dispositivo.Latitudine, dispositivo.Longitudine], {
                     icon: L.icon({
-                        iconUrl: "http://localhost:8000/immagini/marker/" + dispositivo.tipodispositivo.Logo,
+                        iconUrl: "http://localhost:8000/immagini/marker/" + logo,
                         className: 'icona',
-                        iconSize: [33, 40],
+                        iconSize: [30, 30],
                         iconAnchor: [20, 40],
                     })
-                }).bindTooltip(dispositivo.Name, { permanent: true, direction: "bottom", offset: [-4, 0] })
+                }).bindTooltip(dispositivo.Nome, { permanent: true, direction: "bottom", offset: [-4, 0] })
                 .bindPopup(
                     '<div>' +
                         `<h5 class="mb-0 fw-light pe-5">${dispositivo.Nome}</h5>` +
@@ -201,31 +220,19 @@ export default {
     background-position: center;
 }
 
-/* .cluster-tooltip {
-    display: inline-block;
-    padding: 0px 20px 0px 20px;
-    background-color: rgba(255, 255, 255, 0.9);
-    margin-top: 70px;
-    border-radius: 4px;
-    box-shadow: 0px 2px 3px -1px rgba(0,0,0,0.72);
-} */
 .cluster-tooltip {
+    top: calc( 50% + 15px);
+    left: 50%;
+    transform: translateX(-50%);
     display: inline-block;
-    background-color: rgba(255, 255, 255, 0.9);
-    margin-top: 78px;
-    margin-left: -2px;
-    min-width:40px;
-    height:40px;
-    border-radius: 50%;
-    box-shadow: 0px 2px 3px -1px rgba(0,0,0,0.72);
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0.8);
+    margin-top: 20px;
     font-size: 1rem;
+    min-width: 30px;
+    border-radius: 6px;
+    box-shadow: 0px 2px 3px -1px rgba(0,0,0,0.72);
     text-align: center;
-    line-height:40px;
-    padding-top: 1px;
-    padding-left: 1px;
-    /* display: flex;
-    justify-content: center;
-    align-items: center; */
 }
 .outline-tooltip {
     outline: 3px solid rgb(255, 0, 0);
