@@ -1,7 +1,7 @@
 <template>
     <div :class="'tab-pane fade show active nav-soglie-' + dispositivo.id" :id="'nav-soglie-' + dispositivo.id"
         role="tabpanel" aria-labelledby="nav-soglie-tab">
-        <div v-if="dispositivo.sogliadispositivo.length == 0">
+        <div v-if="dispositivo.sogliadispositivo && dispositivo.sogliadispositivo.length == 0">
             <h2 class="text-center fw-light text-uppercase text-dark pt-4">Nessuna Soglia Associata</h2>
         </div>
         <ul class="list-group" v-else>

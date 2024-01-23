@@ -1,7 +1,7 @@
 <template>
     <div class="container-fluid">
-        <form :action="routeDettagliDispositivo" method="GET" class="row shadow mt-5 rounded-5">
-            <div class="col-12 col-sm-4 col-lg-2 col-xxl-2 d-flex align-items-center justify-content-center py-3" data-bs-toggle="collapse" :data-bs-target="'#d-' + chiave" aria-expanded="true">
+        <form :action="routeDettagliDispositivo" method="GET" class="row shadow mt-5 rounded-5 overflow-hidden">
+            <div class="col-12 col-sm-4 col-lg-2 col-xxl-2 d-flex align-items-center justify-content-center" data-bs-toggle="collapse" :data-bs-target="'#d-' + chiave" aria-expanded="true">
                 <div class="container-allerta">
                     <div class="box-allerta-1 p-1" :class="{ 'color-allerta-1': dispositivo.StatoComunicazioni === 0, 'color-allerta-2': dispositivo.StatoComunicazioni === 1, 'color-allerta-4': dispositivo.StatoComunicazioni === 2 }">
                         <div class="w-75 h-75 rounded-circle d-flex justify-content-center align-items-center" style="z-index: 10; overflow: hidden">
@@ -11,9 +11,9 @@
                     </div>
                 </div>
             </div>
-            <div class="col-12 col-sm-8 col-lg-5 col-xl-6 p-0 d-flex flex-column justify-content-center text-end text-md-center text-lg-start py-3"
+            <div class="col-12 col-sm-8 col-lg-5 col-xl-6 p-0 d-flex flex-column justify-content-center text-end text-md-center text-lg-start"
                 data-bs-toggle="collapse" :data-bs-target="'#d-' + chiave" aria-expanded="true">
-                <h2 class="text-uppercase text-center text-sm-start fw-light mb-0">
+                <h2 class="text-uppercase text-center text-sm-start fw-light mb-0 pt-3">
                     {{ dispositivo.Nome }}
                 </h2>
                 <h4 v-if="dispositivo.CodiceStazione" class="text-uppercase text-center text-sm-start fw-light mb-0">
@@ -70,9 +70,18 @@
                     </div>
                 </div>
             </div>
+            <div @click="giraFreccia(chiave)" class="col-12 colore-card-0 cursor-pointer py-2 text-center" :class="{ 'elemento-card-4': dispositivo.StatoComunicazioni == 2, 'elemento-card-2': dispositivo.StatoComunicazioni == 1, 'elemento-card-1': dispositivo.StatoComunicazioni == 0 }" data-bs-toggle="collapse" :data-bs-target="'#d-' + chiave" aria-expanded="true" >
+                <span class="material-icons icon-centered center apri-chiudi" :id="'freccia' + chiave">
+                    expand_more
+                </span>
+                <!-- <span class="material-icons icon-centered center">
+                    expand_less
+                </span> -->
+            </div>
         </form>
         
-        <div v-if="(dispositivo.sogliadispositivo && dispositivo.sogliadispositivo.length > 0) || (dispositivo.comandodispositivo && dispositivo.comandodispositivo.length > 0)" class="container-fluid shadow py-3 px-4 rounded-bottom-5">
+        <!-- <div v-if="(dispositivo.sogliadispositivo && dispositivo.sogliadispositivo.length > 0) || (dispositivo.comandodispositivo && dispositivo.comandodispositivo.length > 0)" class="container-fluid shadow py-3 px-4 rounded-bottom-5"> -->
+        <div class="container-fluid shadow py-3 px-4 rounded-bottom-5">
             <div :id="'d-' + chiave" class="collapse collapse-pagination mt-3 mb-3 mx-2"
                 aria-labelledby="headingOne" data-parent="#accordionDispositivi">
 
@@ -153,6 +162,18 @@ export default {
             required: true,
         },
     },
+    methods: {
+        giraFreccia(chiave) {
+
+            const div = document.getElementById('freccia' + chiave);
+            const classi = div.classList;
+            if (classi.contains('apri')) {
+                div.classList.remove('apri');
+            } else {
+                div.classList.add('apri');
+            }
+        }
+    },
     components: {
         Modifica,
         Elimina,
@@ -172,4 +193,13 @@ export default {
     z-index: 99;
     text-align: center;
 }
+
+.apri {
+    transform: rotate(180deg);
+}
+
+.apri-chiudi {
+    transition: transform .15s linear;
+}
+
 </style>

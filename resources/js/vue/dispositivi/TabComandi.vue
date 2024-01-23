@@ -1,7 +1,7 @@
 <template>
     <div :class="'tab-pane fade nav-comandi-' + dispositivo.id" :id="'nav-comandi-' + dispositivo.id"
         role="tabpanel" aria-labelledby="nav-comandi-tab">
-        <div v-if="dispositivo.comandodispositivo.length == 0">
+        <div v-if="dispositivo.comandodispositivo && dispositivo.comandodispositivo.length == 0">
             <h2 class="text-center fw-light text-uppercase text-dark pt-4">Nessun Comando Associato</h2>
         </div>
         <ul class="list-group" v-else>
