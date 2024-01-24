@@ -13,6 +13,7 @@
     route-dati-dispositivi="{{ route('dati_dispositivi') }}"
     route-dati-tipodisp="{{ route('dati_tipodisp') }}"
     route-dati-valori-disponibili="{{ route('dati_valori_disponibili') }}"
+    route-dati-filtrati-grafici="{{ route('dati_filtrati_grafici') }}"
 ></grafici>
 
 @endsection

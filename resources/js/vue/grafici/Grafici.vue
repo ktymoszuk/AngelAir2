@@ -106,54 +106,20 @@
                     </select>
                 </div>
             </div>
-            <div class="col-12 col-sm-6 col-md-4 d-flex justify-content-end align-items-start mt-3">
-                <div class="input-group w-100 border rounded">
-                    <span class="btn border-0 bg-light d-flex w-25" style="cursor: auto">
-                        Valori<asterisco/>
-                    </span>
-                    <div class="dropdown w-75">
-                        <button class="btn border-0 p-0 dropdown-toggle w-100 h-100 d-flex justify-content-between align-items-center pt-1 px-3" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                            Seleziona
-                        </button>
-                        <ul class="dropdown-menu py-0 w-100 border-top-0 rounded-top-0 overflow-hidden" aria-labelledby="dropdownMenuButton1">
-                            <li v-for="(item, key) in valoriDisponibili" class="dropdown-item px-3 py-2 d-flex" @click="toggleCheckbox(item, $event)">
-                                <div class="checkbox-wrapper">
-                                    <input :id="'checkbox-' + key" type="checkbox" :value="item" v-model="lista">
-                                    <label :for="'checkbox-' + key" class="ms-0 me-3" @click.stop>
-                                        <div class="tick_mark"></div>
-                                    </label>
-                                </div>
-                                <label :for="'checkbox-label-' + key">{{ item }}</label>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
+
+            <!-- Multiselect valori -->
             <div class="col-12 col-sm-6 col-md-4 d-flex justify-content-end align-items-start mt-3">
                 <div class="input-group w-100">
-                    <span class="btn border border-end-0 bg-light d-flex w-25" style="cursor: auto">
-                        Valori
-                    </span>
-                    <!-- 
-                    // 'dbid': l'id dell'elemento che andrà nel value nel db
-                    // 'options': dati per le options
-                    // 'optionLabel': variabile che prelevo dalle options per creare il label del checkbox
-                    // 'nameSelect': nome da inserire del campo select
-                    // 'nameCheckbox': il 'name' che mi serve per il db
-                    // 'giaSelezionati': index degli elementi già selezionati
-                    -->
 
-                    <multiselect></multiselect>
+                    <multiselect :dispositivo="dispositivo" @toggleMostraElementi="toggleMostraElementi" :mostra-elementi="mostraElementi" dbid="colonna" :options="valoriDisponibili" option-label="nome" name-select="Valori" name-checkbox="colonna" :gia-selezionati="valoriSelezionati" @aggiorna-selezione-valori="aggiornaSelezioneValori"></multiselect>
+                
                 </div>
             </div>
 
-            <div class="col-12 col-sm-6 col-md-4 mt-3">
-                <span v-for="badge in lista" class="badge bg-blu-axatel fw-normal text-uppercase py-1 me-2">{{ badge }}</span>
-            </div>
-            <div class="col-12 col-sm-6 col-md-4 col-lg-3 offset-lg-1 col-xl-2 offset-xl-2 d-flex justify-content-end align-items-start mt-3">
-                <button class="btn btn-primary text-uppercase w-100" type="button" :disabled="codStruttura === null || lista.length == 0"
+            <div class="col-12 col-sm-6 offset-md-4 col-md-4 col-lg-3 offset-lg-1 col-xl-2 offset-xl-2 d-flex justify-content-end align-items-start mt-3">
+                <button class="btn btn-primary text-uppercase w-100" type="button" :disabled="codStruttura === null || valoriSelezionati.length == 0"
                     @click="showDati('line')">
-                    <div v-if="!aggiornamentoInCorso">
+                    <div v-if="!aggiornamento">
                         Visualizza
                     </div>
                     <div v-else>
@@ -230,6 +196,7 @@
                 </div>
             </section>
         </div>
+        <div id="chartDispositivo" class="mb-5" style="width: 100%; height: 70vh;"></div>
         <div v-if="dispositivoScelto" id="area-grafico" class="bg-light px-2">
             <div v-if="isFullScreen" class="d-flex justify-content-end my-5 pe-5 me-5">
                 <button type="button" class="btn btn-primary p-2 rounded-circle" @click="graficoChiusuraFullscreen">
@@ -244,7 +211,6 @@
                 </button>
             </div>
             <div class="row pb-5 mb-5" id="printarea">
-                <div id="chartDispositivo" class="mb-5" style="width: 100%; height: 70vh;"></div>
             </div>
         </div>
         <div v-else class="text-uppercase fw-light fs-1 mt-5 pt-5 text-center">Seleziona un dispositivo</div>
@@ -260,7 +226,7 @@ import { jsPDF } from "jspdf";
 import Titolo from '../componenti/Titolo.vue';
 import Loader from '../componenti/Loader.vue';
 import Asterisco from '../componenti/Asterisco.vue';
-import Multiselect from '../componenti/Multiselect.vue';
+import Multiselect from './MultiselectValori.vue';
 
 export default {
 components: {
@@ -277,6 +243,11 @@ data() {
         msgErrore: "",
         categoria: '',
         dispositiviFiltrati: null,
+        elementiSelezionati: [],
+        giaSelezionati: [],
+        elementiSelezionatiMultiselect: [],
+        valoriSelezionati: [],
+        mostraElementi: false,
 
         colonneValoriList: [],
         colonneList: [],
@@ -301,7 +272,7 @@ data() {
 
         selectAperto: false,
 
-        aggiornamentoInCorso: false,
+        aggiornamento: false,
         tipologiaVisualizzazioneGrafico: null,
 
         dispositivoScelto: null,
@@ -342,6 +313,16 @@ props: {
     'routeDatiValoriDisponibili': {
         required: true,
     },
+    'routeDatiFiltratiGrafici': {
+        required: true,
+    },
+},
+watch: {
+    dispositivo() {
+        this.valoriSelezionati = null;
+        this.valoriSelezionati = [];
+        this.mostraElementi = false;
+    }
 },
 mounted() {
     this.setup();
@@ -362,6 +343,9 @@ mounted() {
     // this.isCaricamento = false;
 },
 methods: {
+    toggleMostraElementi(bool) {
+        this.mostraElementi = bool;
+    },
     async setup() {
         try {
             this.caricamento = true;
@@ -377,6 +361,9 @@ methods: {
                 console.log(e);
         }
     },
+    aggiornaSelezioneValori(valori) {
+        this.valoriSelezionati = valori;
+    },
     dispositiviValidiPerSelect() {
         const struttura = this.codStruttura;
         const tipoDisp = this.codCategoriaDisp;
@@ -386,6 +373,9 @@ methods: {
             (dispositivo.codTipoDisp === tipoDisp || tipoDisp === 0)
         );
         this.dispositiviFiltrati = filtro;
+    },
+    updateElementiMultiselect(selectedItems) {
+        this.elementiSelezionatiMultiselect = selectedItems;
     },
     //Otteniamo i dati per i dispositivi e per il form
     // async getDatiPrincipali() {  //Dati principali per i filtri dati
@@ -403,28 +393,29 @@ methods: {
     //         console.log(e);
     //     }
     // },
-    toggleCheckbox(item, event) {
-        try {
-            // Impedisco la propagazione dell'evento di clic
-            event.stopPropagation();
+    // toggleCheckbox(item, event) {
+    //     try {
+    //         // Impedisco la propagazione dell'evento di clic
+    //         event.stopPropagation();
     
-            // Trovo l'indice di item in valoriDisp
-            const index = this.valoriDisp.indexOf(item);
+    //         // Trovo l'indice di item in valoriDisp
+    //         const index = this.valoriDisp.indexOf(item);
     
-            // Se l'elemento è presente in valoriDisp, verifica se è già selezionato
-            if (index !== -1) {
-                if (this.lista.includes(item)) {
-                    // Rimuovi l'elemento dalla lista se è selezionato
-                    this.lista.splice(this.lista.indexOf(item), 1);
-                } else {
-                    // Aggiungi l'elemento alla lista se non è selezionato
-                    this.lista.push(item);
-                }
-            }
-        } catch (e) {
-            console.log(e);
-        }
-    },
+    //         // Se l'elemento è presente in valoriDisp, verifica se è già selezionato
+    //         if (index !== -1) {
+    //             if (this.lista.includes(item)) {
+    //                 // Rimuovi l'elemento dalla lista se è selezionato
+    //                 this.lista.splice(this.lista.indexOf(item), 1);
+    //             } else {
+    //                 // Aggiungi l'elemento alla lista se non è selezionato
+    //                 this.lista.push(item);
+    //             }
+    //         }
+    //     } catch (e) {
+    //         console.log(e);
+    //     }
+    // },
+    
     // composizione selezione valori
     async getValori() {
         try {
@@ -435,7 +426,7 @@ methods: {
             this.valoriDisponibili = await getRequest(this.routeDatiValoriDisponibili, {
                 'deveui': deveui,
             }, null);
-            console.log(this.valoriDisponibili);
+
 
             // this.valoriDisp = res.valoriDisp;
 
@@ -477,27 +468,28 @@ methods: {
     },
     // visualizzazione grafico
     async showDati(tipo) {
-        try {
-            this.dispositivi.forEach(dispositivo => {
-                if (dispositivo.id == this.dispositivo) {
-                    this.dispositivoScelto = dispositivo;
-                }
-            });
+            const deveui = this.dispositivo;
+            const dispositivi = this.selectDispositivi.slice();
+            const dispositivo = dispositivi.filter(dispositivo =>
+                dispositivo.DevEui == deveui
+            )[0];
+            const appTag = dispositivo.AppTag;
+
             this.tipologiaVisualizzazioneGrafico = tipo;
-            this.aggiornamentoInCorso = true;
+            this.aggiornamento = true;
 
             let datasets = [];
 
             // filtri
-            const appTag = $("#selectDispositivo").find("option:selected").attr("appTag");
-            const deveui = this.dispositivo;
 
-            let res = await getRequest("/grafici/dati/filtrati", {
-                "apptag": appTag,
+            let res = await getRequest(this.routeDatiFiltratiGrafici, {
+                "tipodisp": dispositivo.tipodispositivo.IdTipo,
                 "deveui": deveui,
                 "dataDA": this.dataDA,
                 "dataA": this.dataA,
             }, null);
+
+            console.log(res);
 
             let grafico = echarts.init(document.getElementById("chartDispositivo")); // init grafico
             grafico.showLoading(); // caricamento dati
@@ -608,12 +600,13 @@ methods: {
                 grafico.setOption(option, true); // visualizzazione grafico
                 grafico.hideLoading();
 
-                this.aggiornamentoInCorso = false;
+                this.aggiornamento = false;
                 this.formNascosto = true;
                 this.primaRicerca = true;
 
                 this.graficoResponsive(grafico);
             }
+        try {
         }
         catch (e) {
             console.log(e);

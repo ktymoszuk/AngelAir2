@@ -65,6 +65,7 @@ Route::middleware(['utente'])->group(function () {
     Route::get("/monitoraggio/grafici", [GraficiController::class, "index"])->name("grafici"); // grafici
     Route::get("/monitoraggio/grafici/dati", [GraficiController::class, "show"])->name("dati_grafici"); // dati grafici
     Route::get("/monitoraggio/grafici/valoridisponibili", [GraficiController::class, "valoriDisponibili"])->name("dati_valori_disponibili"); // dati grafici
+    Route::get("/monitoraggio/grafici/datifiltrati", [GraficiController::class, "datiFiltrati"])->name("dati_filtrati_grafici"); // dati grafici
 
     // situazione real-time
     Route::get("/monitoraggio/realtime", [RealtimeController::class, 'view'])->name('real_time');
