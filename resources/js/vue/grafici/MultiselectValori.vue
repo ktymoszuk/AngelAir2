@@ -1,5 +1,5 @@
 <template>
-    <div class="position-relative w-100" style="z-index: 9999;">
+    <div class="position-relative w-100" style="z-index: 99;">
         <div class="input-group cursor-pointer" @click="mostraElementi = !mostraElementi; $emit('toggleMostraElementi', mostraElementi)">
             <span class="btn border border-end-0 bg-light" style="cursor: auto">{{ nameSelect }}</span>
             <div class="form-control d-flex justify-content-between align-items-center pe-2" >
@@ -93,12 +93,16 @@ export default {
         'selectDispositivi': {
             required: false,
         },
+        'dispositivo': {
+            required: false,
+        },
     },
-    // watch: {
-    //     giaSelezionati() {
-    //         this.toggleElemento('no');
-    //     }
-    // },
+    watch: {
+        dispositivo() {
+            this.elementiSelezionati = [];
+            // this.controllaCheckbox();
+        }
+    },
     methods: {
         // toggleElemento(elemento) {
         //     let elementiSelezionati;

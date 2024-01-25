@@ -3,8 +3,17 @@
 
         <!-- Titolo -->
         <titolo titolo="Grafici" sottotitolo="dei dati" :bottoni="bottoni"></titolo>
+
+        <div v-if="!formAperto" class="row mb-5 justify-content-end" style="margin-top: -30px;">
+            <div class="col-12 col-md-6 col-lg-5 col-xxl-4 px-0">
+                <button class="btn btn-primary text-uppercase w-100" @click="formAperto = true">
+                    Fai una nuova ricerca
+                </button>
+            </div>
+        </div>
+
         <!-- Filtri -->
-        <nav class="row">
+        <nav v-else class="row mb-5">
 
             <div class="col-12 col-sm-6 col-md-4 d-flex justify-content-end align-items-start mt-3 mt-md-0">
                 <div class="input-group">
@@ -53,7 +62,7 @@
                         Dispositivo<asterisco/>
                     </span>
                     <select id="selectDispositivo" class="form-select" :disabled="codStruttura === null || !dispositiviFiltrati"
-                            v-model="dispositivo" @change="getValori()">
+                            v-model="dispositivo" @change="valoriSelezionati = []; getValori()">
                             <option disabled value="">
                                 <span v-if="dispositiviFiltrati != null">
                                     Seleziona
@@ -118,7 +127,7 @@
 
             <div class="col-12 col-sm-6 offset-md-4 col-md-4 col-lg-3 offset-lg-1 col-xl-2 offset-xl-2 d-flex justify-content-end align-items-start mt-3">
                 <button class="btn btn-primary text-uppercase w-100" type="button" :disabled="codStruttura === null || valoriSelezionati.length == 0"
-                    @click="showDati('line')">
+                    @click="mostraElementi = false; formAperto = false; showDati('line')">
                     <div v-if="!aggiornamento">
                         Visualizza
                     </div>
@@ -243,11 +252,11 @@ data() {
         msgErrore: "",
         categoria: '',
         dispositiviFiltrati: null,
-        elementiSelezionati: [],
         giaSelezionati: [],
         elementiSelezionatiMultiselect: [],
         valoriSelezionati: [],
         mostraElementi: false,
+        formAperto: true,
 
         colonneValoriList: [],
         colonneList: [],
@@ -319,8 +328,6 @@ props: {
 },
 watch: {
     dispositivo() {
-        this.valoriSelezionati = null;
-        this.valoriSelezionati = [];
         this.mostraElementi = false;
     }
 },
@@ -426,15 +433,6 @@ methods: {
             this.valoriDisponibili = await getRequest(this.routeDatiValoriDisponibili, {
                 'deveui': deveui,
             }, null);
-
-
-            // this.valoriDisp = res.valoriDisp;
-
-            // this.colonneList = res.colonne;
-
-            // if (!this.lista.includes("Temperatura")) {
-            //     this.lista.push("Temperatura");
-            // }
         }
         catch (e) {
             console.log(e);
@@ -473,101 +471,104 @@ methods: {
             const dispositivo = dispositivi.filter(dispositivo =>
                 dispositivo.DevEui == deveui
             )[0];
-            const appTag = dispositivo.AppTag;
+            // const appTag = dispositivo.AppTag;
 
             this.tipologiaVisualizzazioneGrafico = tipo;
             this.aggiornamento = true;
 
-            let datasets = [];
 
             // filtri
-
             let res = await getRequest(this.routeDatiFiltratiGrafici, {
                 "tipodisp": dispositivo.tipodispositivo.IdTipo,
                 "deveui": deveui,
                 "dataDA": this.dataDA,
                 "dataA": this.dataA,
+                "colonne": this.valoriSelezionati,
             }, null);
 
-            console.log(res);
 
-            let grafico = echarts.init(document.getElementById("chartDispositivo")); // init grafico
-            grafico.showLoading(); // caricamento dati
-
+            // const valori = res.Valori.pop();
+            const valori = JSON.parse(res.Valori);
+            console.log(typeof(valori));
+            const datasets = [];
+            // Se il grafico esisteva lo resetto
+            let grafico;
             if (grafico) { grafico.clear(); }
-
+            
             // if (res.error != undefined) {  //messaggio di errore per l'utente se sbagliasse inserire la data
             //     this.msgErrore = res.error;
             //     $("#modalErrore").modal("show");
             // }
             else {
+                grafico = echarts.init(document.getElementById("chartDispositivo")); // init grafico
+                grafico.showLoading(); // caricamento dati
                 // dati
                 let dati = [];
 
-                this.lista.forEach(nomeColonna => {
-                    res.colonne.forEach((element, key) => {
-                        let datiProvvisori = [];
-                        if (nomeColonna == this.colonneList[element]) {
-                            res.data.Dati.forEach(row => {
-                                dati.unshift(row[element]);
-                                datiProvvisori.unshift(row[element]);
-                            });
-
-                            if (tipo != "polar") {
-                                datasets.push({
-                                    type: tipo,
-                                    name: `Andamento ${res.data.Valori[key]}`,
-                                    color: this.getRandomColore(key),
-                                    data: datiProvvisori
-                                });
-                            } else {
-                                datasets.push({
-                                    coordinateSystem: tipo,
-                                    type: "line",
-                                    name: `Andamento ${res.data.Valori[key]}`,
-                                    color: this.getRandomColore(key),
-                                    data: datiProvvisori
-                                });
-                            }
-                        }
-                    });
+                console.log(res.Colonne);
+                res.Colonne.forEach((colonna, key) => {
+                    console.log(res.Dati);
+                    if (tipo != "polar") {
+                        datasets.push({
+                            type: tipo,
+                            name: `Andamento ${valori[key]}`,
+                            color: this.getRandomColore(key),
+                            data: res.Dati
+                        });
+                    } else {
+                        datasets.push({
+                            coordinateSystem: tipo,
+                            type: "line",
+                            name: `Andamento ${valori[key]}`,
+                            color: this.getRandomColore(key),
+                            data: res.Dati
+                        });
+                    }
+                    
+                    // let datiProvvisori = [];
+                    // if (colonna == this.colonneList[element]) {
+                    //     res.data.Dati.forEach(row => {
+                    //         dati.unshift(row[element]);
+                    //         datiProvvisori.unshift(row[element]);
+                    //     });
+                    // }
                 });
 
                 // dataora
-                let dataOra = [];
-                res.data.DataOra.forEach(row => {
-                    dataOra.push(row);
-                });
+                let dataOra = res.DateOre;
+                // res.DateOre.forEach(row => {
+                //     dataOra.push(row);
+                // });
 
                 // soglie
                 let valoreMinimo = [];
                 let valoreMassimo = [];
 
                 if (tipo != "polar") {
-                    if (res.data.Soglie != undefined) {
-                        res.data.Soglie.forEach((row) => {
+                    if (res.Soglie != undefined) {
+                        res.Soglie.forEach((soglia) => {
 
-                            if (row.ValoreMassimo != null) {
-                                valoreMassimo.push(row.ValoreMassimo);
+                            if (soglia.ValoreMassimo != null) {
+                                valoreMassimo.push(soglia.ValoreMassimo);
                             }
-                            if (row.ValoreMinimo != null) {
-                                valoreMinimo.push(row.ValoreMinimo);
+                            if (soglia.ValoreMinimo != null) {
+                                valoreMinimo.push(soglia.ValoreMinimo);
                             }
 
-                            if (row.AliasMassimo != null && this.lista.includes("Valore")) {
+                            if (soglia.AliasMassimo != null && this.lista.includes("Valore")) {
                                 datasets.push({
                                     type: 'line',
-                                    name: `Soglia ${row.AliasMassimo}`,
-                                    color: row.ColoreMassimo,
-                                    data: row.ValoreMassimo
+                                    name: `Soglia ${soglia.AliasMassimo}`,
+                                    color: soglia.ColoreMassimo,
+                                    data: soglia.ValoreMassimo
                                 });
                             }
                             if (this.lista.includes("Valore")) {
                                 datasets.push({
                                     type: 'line',
-                                    name: `Andamento ${row.AliasMinimo}`,
-                                    color: row.ColoreMinimo,
-                                    data: row.ValoreMinimo
+                                    name: `Andamento ${soglia.AliasMinimo}`,
+                                    color: soglia.ColoreMinimo,
+                                    data: soglia.ValoreMinimo
                                 });
                             }
                         });

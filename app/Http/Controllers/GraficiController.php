@@ -25,36 +25,119 @@ class GraficiController extends Controller
     }
 
     public function datiFiltrati(Request $request) {
-        
-        $tipodisp = (int)$request->tipodisp;
+
+        $tipoDisp = $request->tipodisp;
         $deveui = $request->deveui;
         $dataDA = ($request->dataDA != "Invalid date") ? $request->dataDA : "";
         $dataA = ($request->dataA != "Invalid date") ? $request->dataA : "";
-        
-        $tipoDispositivo = TipoDispositivo::where("IdTipo", $tipodisp)->first();
-        $objectVars = get_object_vars($tipoDispositivo);
-        return response()->json($objectVars);
-        
-        $chiavi = array_keys($tipoDispositivo->toArray());
+        $colonne = $request->colonne;
+        array_push($colonne, 'DataOra');
 
-        $keys = [];
-        $chiaviNonNecessarie = ['IdTipo', 'Logo', 'Nome', 'Note', 'ParserName', 'PinMappa', ];
+        // Prendo i dati da statodisp
+        $query = StatoDisp::where("DevEui", $deveui);
 
-        $result = [];
-        foreach ($chiavi as $k => $chiave) {
-            if (!in_array($chiave, $chiaviNonNecessarie)) {
-                array_push($keys, $chiavi[$k]);
-                if (!is_null($tipoDispositivo[$chiave])) {
-                    $obj = (object)[];
-                    $obj->nome = $tipoDispositivo[$chiave];
-                    $obj->colonna = $chiave;
-                    array_push($result, $obj);
-                }
+        if (!empty($dataDA) && !empty($dataA)) {
+            $query->where('DataOra', '>', $dataDA)->where('DataOra', '<', $dataA)->orderBy("DataOra", "DESC");
+        }
+
+        if (!empty($dataA) && empty($dataDA)) {
+            $query->where('DataOra', '>', $dataDA)->orderBy("DataOra", "DESC")->limit(10000);
+        }
+
+        if (!empty($dataDA) && empty($dataA)) {
+            $query->where('DataOra', '<', $dataA)->orderBy("DataOra", "DESC")->limit(10000);
+        }
+
+        if (empty($dataDA) && empty($dataA)) {
+            $query->orderBy("DataOra", "DESC")->limit(10000);
+        }
+        $statoDisp = $query->get($colonne);
+        
+        // Prendo il Tipo del dispositivo
+        $tipoDisp = TipoDispositivo::where('IdTipo', $tipoDisp)->first()->toArray();
+        $tipoKeys = array_keys($tipoDisp);
+        $tipoValues = array_values($tipoDisp);
+
+        $valori = (array)[];
+
+        foreach ($tipoKeys as $k => $key) {
+            if (in_array($key, $colonne)) {
+                array_push($valori, $tipoValues[$k]);
             }
         }
 
+        array_push($valori, 'DataOra');
+
+
+        // Aggiusto i dati
+        $dati = array();
+        $dateOre = [];
+        foreach ($statoDisp as $s => $stato) {
+            $dato = [];
+            $dato['DataOra'] = date('d/m/Y H:i:s', strtotime($stato->DataOra));
+            array_push($dateOre, date('d/m/Y H:i:s', strtotime($stato->DataOra)));
+            // return response()->json($dato);
+
+            foreach ($tipoKeys as $k => $key) {
+                if (in_array($key, $colonne)) {
+                    $dato[$tipoValues[$k]] = $stato[$key];
+                }
+            }
+            array_push($dati, $dato);
+            
+        }
+
+        $dispositivo = Dispositivo::with("sogliadispositivo")->where("DevEui", $deveui)->first();
+
+        $soglie = $dispositivo->sogliadispositivo;
+
+        $result = [];
+        $result['Dati'] = $dati;
+        $result['Soglie'] = $soglie;
+        $result['Colonne'] = $colonne;
+        $result['Valori'] = $valori;
+        $result['DateOre'] = $dateOre;
+
+
         return response()->json($result);
 
+        // $dati = [];
+        // foreach ($statiDisp as $value) {
+        //     foreach ($colonne as $col) {
+        //         $dati[$col] = $value->$col;
+        //     }
+        //     $result["Dati"][] = $dati;
+        //     $result["DataOra"][] = date('d-m-Y H:i:s', strtotime($value->DataOra));
+        // }
+
+        // //Soglie associate al sensore
+        // $soglieRow = Dispositivo::with("sogliedispositivo")->where("Deveui", $deveui)->first();
+
+        // $result["Soglie"] = [];
+
+        // foreach ($soglieRow->sogliedispositivo as  $key => $value) {
+        //     if (!isset($soglia[$key])) {
+        //         //aggiungiamo il filtro della soglia
+        //         $soglia[$key]["AliasMinimo"] = $value->AliasMinimo;
+        //         $soglia[$key]["ColoreMinimo"] = $value->ColoreMinimo;
+        //         $soglia[$key]["AliasMassimo"] = $value->AliasMassimo;
+        //         $soglia[$key]["ColoreMassimo"] = $value->ColoreMassimo;
+        //         $soglia[$key]["ValoreMinimo"] = array_fill(0, count($statiDisp), $value->ValoreMinimo);
+        //         $soglia[$key]["ValoreMassimo"] = array_fill(0, count($statiDisp), $value->ValoreMassimo);
+
+        //         array_push($result["Soglie"], $soglia[$key]);
+        //     }
+        // }
+
+        // $result["Valori"] = [];
+
+        // foreach ($chiavi as $key => $chiave) {
+        //     if (in_array($key, $colonne)) array_push($result["Valori"], $chiave);
+        // }
+
+        // return response()->json(['data' => $result, 'colonne' => $colonne]);
+
+        return response()->json($statoDisp);
     }
 
     public function datiFiltrati2(Request $request) {
